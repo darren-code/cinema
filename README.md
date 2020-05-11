@@ -1,4 +1,4 @@
 # cinema
 
 Run <br>
-composer install
+<pre>composer install</pre>
