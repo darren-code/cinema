@@ -10,12 +10,12 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
 
-    {{Html::style('assets/css/bootstrap.min.css')}}
-    {{Html::style('assets/css/animate.min.css')}}
-    {{Html::style('assets/css/paper-dashboard.css')}}
+    {{Html::style('public/assets/css/bootstrap.min.css')}}
+    {{Html::style('public/assets/css/animate.min.css')}}
+    {{Html::style('public/assets/css/paper-dashboard.css')}}
     {{Html::style('http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css')}}
     {{Html::style('https://fonts.googleapis.com/css?family=Muli:400,300')}}
-    {{Html::style('assets/css/themify-icons.css')}}
+    {{Html::style('public/assets/css/themify-icons.css')}}
 </head>
 <body>
 
@@ -54,7 +54,7 @@
                         </div>
                         @endif
 
-                        <form method="post" action="/admin/login">
+                        <form method="post" action="/github/cinema/admin/login">
                             @csrf
                             <div class="form-group">
                                 <label for="email">Email:</label>
@@ -83,6 +83,6 @@
 
 </body>
 
-{{Html::script('assets/js/jquery-1.10.2.js')}}
-{{Html::script('assets/js/bootstrap.js')}}
+{{Html::script('public/assets/js/jquery-1.10.2.js')}}
+{{Html::script('public/assets/js/bootstrap.js')}}
 </html>

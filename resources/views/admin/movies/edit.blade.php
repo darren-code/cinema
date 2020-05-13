@@ -1,25 +1,25 @@
 @extends('admin.layouts.master')
 
 @section('page')
-    Edit Product
+    Edit Movie
 @endsection
 
 @section('content')
 <div class="row">
-    <div class="col-lg-10 col-md-10">
+    <div class="col-lg-12 col-md-12">
         @include('admin.layouts.message')
         <div class="card">
             <div class="header">
-                <h4 class="title">Edit Product</h4>
+                <h4 class="title">Edit Movie</h4>
             </div>
             <div class="content">
-                {!!Form::open(['url'=>['admin/products',$product->id],'files'=>'true','method'=>'put'])!!} 
+                {{ Form::open(['url'=>[ 'admin/movies',$movies->id], 'files' => 'true', 'method' => 'put']) }} {{-- Jo ini directive apa? {!!} --}}
                     <div class="row">
                         <div class="col-md-12">
 
-                            @include('admin.products._field')
+                            @include('admin.movies._field')
                             <div class="form-group">
-                                {{ Form::submit('Update Product',['class'=>'btn btn-info btn-fill btn-wd'])}}
+                                {{ Form::submit('Update Movie', ['class'=>'btn btn-info btn-fill btn-wd']) }}
                             </div>
 
                         </div>

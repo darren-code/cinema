@@ -9,6 +9,7 @@
 @stop
 
 @section('content')
+@include('includes.alert')
     <div class="text-center login-area">
         <form action="{{ route('signup') }}" method="post" class="form-signin needs-validation" accept-charset="utf-8" novalidate>
             <img class="mb-4" src="{{ URL::to('assets/img/logo.png') }}" alt="" width="72" height="72">
@@ -38,7 +39,7 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
             <p class="mt-3 mb-3 text-muted">&copy; Flestnia 2020</p>
         </form>
-        {{-- @include('includes.alert') --}}
+        
     </div>
 @endsection
 

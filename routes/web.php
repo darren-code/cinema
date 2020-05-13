@@ -29,6 +29,16 @@ Route::group(['middleware' => ['web']], function () {
         'as' => 'movie.poster'
     ]);
 
+    Route::get('/profile', [
+        'uses' => 'UserController@profile',
+        'as' => 'profile'
+     ]);
+
+    Route::get('/profile/{filename}', [
+        'uses' => 'UserController@profile_picture',
+        'as' => 'user.profile'
+    ]);
+
     Route::get('/signout', [
         'uses' => 'UserController@logout',
         'as' => 'signout',
@@ -53,13 +63,13 @@ Route::group(['middleware' => ['web']], function () {
         'as' => 'signin',
     ]);
 
-    Route::prefix('admin')->group(function(){
+    Route::prefix('/admin')->group(function(){
         Route::middleware('auth:admin')->group(function(){
             // Dashboard
             Route::get('/', 'DashboardController@index');
             
             // Products
-            Route::resource('/tickets','TicketController');
+            Route::resource('/movies','MovieController');
             
             // Orders
             Route::resource('/order','OrderController');

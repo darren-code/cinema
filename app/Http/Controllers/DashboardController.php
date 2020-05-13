@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Ticket;
+use App\Movie;
 use App\User;
 use App\Order;
+use App\Studio;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,12 +13,13 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $tickets = new Ticket();
+        $movies = new Movie();
         $orders = new Order();
         $user = new User();
+        $studio = new Studio();
 
         return view('admin.dashboard',
-            compact('tickets','orders','user')
+            compact('movies','orders','user','studio')
         );
     } 
 }

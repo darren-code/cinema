@@ -3,12 +3,163 @@
 namespace App\Http\Controllers;
 
 use App\Movie;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
+    /*
+        Admin Panel
+    */
+    public function index()
+    {
+        $movies = Movie::all();
+
+        return view('admin.movies.index',compact('movies'));
+    }
+    public function create()
+    {
+        $movies = new Movie();
+
+        return view('admin.movies.create',compact('movies'));
+    }
+    public function destroy($id)
+    {
+        // Delete Product
+        Movie::destroy($id);
+
+        // Store message
+        session()->flash('msg','Movie has been deleted');
+
+        //Redirect Page
+        return redirect('admin/movies');
+    }
+    public function edit($id)
+    {
+        // Edit Product
+        $movies = Movie::find($id);
+        return view('admin.movies.edit ', compact('movies'));
+    }
+    public function store(Request $req)
+    {
+        // dd($req->all());
+
+        // Validate Form
+        $req->validate([
+            'title'=>'required',
+            'director'=>'required',
+            'avail' => 'required',
+            'released' => 'required',
+            'parental' => 'required',
+            'synopsis'=>'required',
+            'poster'=>'image|required',
+            'trailer' => 'required',
+        ]);
+
+        // Upload image
+        if($req->hasfile('image')){
+            $image = $req->image;
+            $image->move('poster',$image->getClientOriginalName());
+        }
+
+        // Save data into database
+        Movie::create([
+            'title' => $req->title,
+            'director'=> $req->director,
+            'avail' => $req->avail,
+            'released' => $req->released,
+            'parental' => $req->parental,
+            'synopsis'=> $req->synopsis,
+            'poster'=> rand().$req->poster->getClientOriginalName(),
+            'trailer'=> $req->trailer,
+        ]);
+
+        // Session Message
+        $req->session()->flash('msg','New movie has been added');
+
+        // Redirect
+        return redirect('/admin/movies');
+    }
+    public function update(Request $req, $id)
+    {
+        // dd(storage_path('app/poster'));
+
+        // Find product
+        $movies = Movie::find($id);
+        // Validate form
+        $req->validate([
+            'title'=>'required',
+            'director'=>'required',
+            'avail' => 'required',
+            'released' => 'required',
+            'parental' => 'required',
+            'synopsis'=>'required',
+            'poster'=>'image|mimes:jpeg,png,jpg,gif,svg',
+            'trailer' => 'required',
+        ]);
+
+                // Check if there is any image
+        // if($req->hasFile('image')){
+        //     //Check if the old image exists inside folder
+        //     if(file_exists(public_path('uploads/').$movies->image)){
+        //         unlink(public_path('uploads/').$movies->image);
+        //     }
+        //     // Upload the new image
+        //     $image = $req->image;
+        //     $image->move('poster',$image->getClientOriginalName());
+
+        //     $movies->image = $req->image->getClientOriginalName();
+        // }
+
+        // If new image is in upload
+        if($req->poster != ''){
+            // Remove old image exists inside folder
+            // Not yet
+
+            $imageName = time().'.'.$req->poster->extension();  
+    
+            $req->poster->move(storage_path('app/poster'), $imageName);
+
+            // Update product
+            $movies->update([
+                'title' => $req->title,
+                'director'=> $req->director,
+                'avail' => $req->avail,
+                'released' => $req->released,
+                'parental' => $req->parental,
+                'synopsis'=> $req->synopsis,
+                'poster'=> $imageName,
+                'trailer'=> $req->trailer,
+            ]);
+        }else{
+            $movies->update([
+                'title' => $req->title,
+                'director'=> $req->director,
+                'avail' => $req->avail,
+                'released' => $req->released,
+                'parental' => $req->parental,
+                'synopsis'=> $req->synopsis,
+                'trailer'=> $req->trailer,
+            ]);
+        }      
+
+        // Store message session
+        $req->session()->flash('msg','Movie has been updated');
+        
+        // Redirect
+        return redirect('admin/movies');
+    }
+    public function show($id)
+    {
+        $movies = Movie::find($id);
+        return view('admin.movies.details',compact('movies'));
+    }
+
+    /*
+        User Panel
+    */
     public function home()
     {
         $now_showing = Movie::where('avail', 1)->orderBy('released', 'desc')->take(4)->get();

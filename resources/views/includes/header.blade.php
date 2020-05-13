@@ -40,7 +40,7 @@
                             Hello, {{ Auth::user()->username }}
                         </a>
                         <div class='dropdown-menu' aria-labelledby='more'>
-                            <a href='' class='dropdown-item'>Profile</a>
+                            <a href='{{ route('profile') }}' class='dropdown-item'>Profile</a>
                             <a href='{{ route('signout') }}' class='dropdown-item'>Sign Out</a>
                         </div>
                     </li>

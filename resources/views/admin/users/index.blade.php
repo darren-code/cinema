@@ -17,7 +17,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Username</th>
                             <th>Email</th>
                             <th>Registered At</th>
                             <th>Actions</th>
@@ -27,9 +27,9 @@
                         @foreach($users as $u)
                         <tr>
                             <td>{{$u->id}}</td>
-                            <td>{{$u->name}}</td>
+                            <td>{{$u->username}}</td>
                             <td>{{$u->email}}</td>
-                            <td>{{$u->created_at.", ".$u->created_at->diffForHumans() }}</td>
+                            <td>{{$u->created}}</td>
                             <td>
                                 <!-- <button class="btn btn-sm btn-success ti-close" title="Block User"></button> -->
                                 {{link_to_route('users.show','Details',$u->id,['class'=>'btn btn-success btn-sm'])}}
