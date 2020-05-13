@@ -13,19 +13,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', function () {
         return view('login');
     })->name('login');
+
+    /*
+    Route::get('/admin', function () {
+        return view('admin');
+    })->name('admin')->middleware('auth');
+    */
+
+    Route::get('/poster/{filename}', [
+        'uses' => 'MovieController@poster',
+        'as' => 'movie.poster'
+    ]);
+
+    Route::get('/signout', [
+        'uses' => 'UserController@logout',
+        'as' => 'signout',
+    ]);
     
     Route::get('/register', function () {
         return view('register');
     })->name('register');
 
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home')->middleware('auth');
+    Route::get('/home', [
+        'uses' => 'MovieController@home',
+        'as' => 'home',
+    ])->middleware('auth');
 
     Route::post('/signup', [
         'uses' => 'UserController@register', // Controller @ Function
@@ -36,4 +52,31 @@ Route::group(['middleware' => ['web']], function () {
         'uses' => 'UserController@login',
         'as' => 'signin',
     ]);
+
+    Route::prefix('admin')->group(function(){
+        Route::middleware('auth:admin')->group(function(){
+            // Dashboard
+            Route::get('/', 'DashboardController@index');
+            
+            // Products
+            Route::resource('/tickets','TicketController');
+            
+            // Orders
+            Route::resource('/order','OrderController');
+            Route::get('/confirm/{id}','OrderController@confirm')->name('order.confirm');
+            Route::get('/pending/{id}','OrderController@pending')->name('order.pending');
+            Route::get('/detail/{id}','OrderController@detail')->name('order.detail');
+            
+            // Users
+            Route::resource('/users','UserController');
+
+            // Logout
+            Route::get('/logout','AdminUserController@logout');
+        });
+
+        // Admin Login
+        Route::get('/login','AdminUserController@index');
+        Route::post('/login','AdminUserController@store');
+
+    });
 });

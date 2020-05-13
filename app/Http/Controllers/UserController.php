@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class UserController extends Controller
 {
     public function register(Request $request)
@@ -28,7 +29,6 @@ class UserController extends Controller
         $user->password = $password;
         $user->birthdate = $birthdate;
         $user->photo = 'default.jpg';
-        $user->role = '0'; // 0 = regular user whereas 1 = admin
 
         $user->save();
 
@@ -47,9 +47,15 @@ class UserController extends Controller
         if (Auth::attempt([
             'username' => $request['username'],
             'password' => $request['password']
-        ])) {
+        ], (!empty($request['remember'])) ? true : false)) {
             return redirect()->route('home');
         }
         return redirect()->back();
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }
