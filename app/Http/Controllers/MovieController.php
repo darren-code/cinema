@@ -6,6 +6,7 @@ use App\Movie;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
@@ -176,5 +177,33 @@ class MovieController extends Controller
     {
         $file = Storage::disk('local')->get('poster/' . $filename);
         return new Response($file, 200);
+    }
+
+    public function details($id)
+    {
+        $related = DB::table('playing_relation')
+                    ->join('movies', 'playing_relation.movie', '=', 'movies.id')
+                    ->join('studios', 'playing_relation.studio', '=', 'studios.id')
+                    ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
+                    ->select('studios.*', 'showtimes.*', 'movies.*')
+                    ->where('movies.id', $id)
+                    ->get();
+
+        // $related = DB::table('playing_relation')->where('movie', $id)->get();
+        // foreach($related as $row)
+        // {
+
+        // }
+        // $studio = DB::table('studios')->where('id', $related->studio)->get();
+        // foreach($related as $row)
+        // {
+
+        // }
+        // $showtime = DB::table('showtimes')->where('id', $related->showtime)->get();
+
+        return view('front.movie', [
+            'movie' => Movie::where('id', $id)->first(),
+            'shows' => $related
+        ]);
     }
 }

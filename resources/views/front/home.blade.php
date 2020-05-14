@@ -9,9 +9,11 @@
     <div class="row justify-content-center">
         @foreach ($nowready as $row)
             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                <a href="{{ route('movie.details', ['id' => $row->id]) }}">
                 @if (Storage::disk('local')->has('poster/' . $row->poster))
                     <img class="img-fluid img-thumbnail rounded" src="{{ route('movie.poster', ['filename' => $row->poster]) }}" alt="{{ $row->title }}">
                 @endif
+                </a>
                 <a class="showcase-title">{{ $row->title }}</a>
                 <p>{{ DateTime::createFromFormat("Y-m-d", $row->released)->format("Y") }}</p>
             </div>

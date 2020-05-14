@@ -24,6 +24,11 @@ Route::group(['middleware' => ['web']], function () {
     })->name('admin')->middleware('auth');
     */
 
+    Route::get('/movie/{id}', [
+        'uses' => 'MovieController@details',
+        'as' => 'movie.details'
+    ])->middleware('auth');
+
     Route::get('/poster/{filename}', [
         'uses' => 'MovieController@poster',
         'as' => 'movie.poster'
@@ -37,7 +42,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/profile', [
         'uses' => 'UserController@profile',
         'as' => 'profile'
-    ]);
+    ])->middleware('auth');
 
     Route::get('/profile/{filename}', [
         'uses' => 'UserController@profile_picture',

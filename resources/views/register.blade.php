@@ -26,12 +26,6 @@
             <label for="password" class="sr-only">Password</label>
             <input type="password" id="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
                 placeholder="Password" name="password" required value="{{ Request::old('password') }}">
-            <div class="checkbox mb-3">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" name="remember" class="custom-control-input" id="remember-me">
-                    <label class="custom-control-label" for="remember-me">Remember Me</label>
-                  </div>
-            </div>
             <div class="mb-3">
                 <a href="{{ route('login') }}">Have an account?</a>
             </div>

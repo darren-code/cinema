@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Order;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -48,13 +49,15 @@ class UserController extends Controller
         ], [
             'birthdate.before' => 'You are not old enough to register!' // Custom Error Message
         ]);
-
+            // dd(preg_replace('/(\D)/','',Uuid::uuid1()));
+        $id = substr(preg_replace('/(\D)/','',Uuid::uuid3(Uuid::NAMESPACE_DNS,$request['username'])),0,8);
         $username = $request['username'];
         $email = $request['email'];
         $birthdate = $request['birthdate'];
         $password = bcrypt($request['password']);
 
         $user = new User();
+        $user->id = $id;
         $user->email = $email;
         $user->username = $username;
         $user->password = $password;
