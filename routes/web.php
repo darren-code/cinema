@@ -29,10 +29,15 @@ Route::group(['middleware' => ['web']], function () {
         'as' => 'movie.poster'
     ]);
 
+    Route::get('/booking', [
+        'uses' => 'UserController@booking',
+        // 'as' => 'profile'
+    ]);
+
     Route::get('/profile', [
         'uses' => 'UserController@profile',
         'as' => 'profile'
-     ]);
+    ]);
 
     Route::get('/profile/{filename}', [
         'uses' => 'UserController@profile_picture',

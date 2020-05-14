@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="">Laramax</a>
+                <a class="navbar-brand" href="{{url('home')}}">Laramax</a>
             </div>
             
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#burger-content" aria-controls="burger-content" aria-expanded="false">
@@ -20,17 +20,17 @@
                 </form>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="" id="" role="button" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="{{url('movies')}}" id="" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="fad fa-clipboard-user"></i> Movies
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="" id="" role="button" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="{{url('booking')}}" id="" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="fad fa-graduation-cap"></i> My Bookings
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="" id="" role="button" {{-- data-toggle="" --}} aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="{{url('favourite')}}" id="" role="button" {{-- data-toggle="" --}} aria-haspopup="true" aria-expanded="false">
                             <i class="fad fa-brain"></i> Favourite
                         </a>
                     </li>

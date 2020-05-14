@@ -8,6 +8,11 @@
 <div class="row">
     <div class="col-lg-12 col-md-12">
         @include('admin.layouts.message')
+        <div class="row">
+            <div class="col mb-3">
+                <a href="{{ url('admin/movies') }}" class="btn btn-primary float-left">Back to movies</a>
+            </div>
+        </div>
         <div class="card">
             <div class="header">
                 <h4 class="title">Edit Movie</h4>

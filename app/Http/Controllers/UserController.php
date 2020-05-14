@@ -63,7 +63,7 @@ class UserController extends Controller
 
         $user->save();
 
-        Auth::login($user);
+        Auth::login($user, false);
 
         return redirect()->route('home');
     }
@@ -81,7 +81,7 @@ class UserController extends Controller
         ], (!empty($request['remember'])) ? true : false)) {
             return redirect()->route('home');
         }
-        return redirect()->back();
+        return redirect()->back()->withErrors(['Invalid Credentials!']);
     }
 
     public function logout()

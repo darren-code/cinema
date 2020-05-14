@@ -38,7 +38,7 @@
                         <tr>
                             <th>Profile Photo</th>
                             <td>
-                                <img src="http://localhost/github/cinema/profile/{{$users[0]->photo }}" alt="" class="img-thumbnail" style="width: 50px">
+                                <img src="{{ route('user.profile', ['filename' => $users[0]->photo]) }}" alt="" class="img-thumbnail" style="width: 150px;">
                             </td>
                         </tr>
 

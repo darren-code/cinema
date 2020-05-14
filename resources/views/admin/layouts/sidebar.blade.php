@@ -37,6 +37,12 @@
                     <p>Users</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('signout') }}">
+                    <i class="fad fa-sign-out-alt"></i>
+                    <p>Sign Out</p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

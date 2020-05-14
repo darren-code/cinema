@@ -23,20 +23,17 @@
             <div class="col-md-6">
                 <div class="profile-head">
                     <h5>
-                        Kshiti Ghelani
+                        {{$user->username}}
                     </h5>
-                    <h6>
-                        Web Developer and Designer
-                    </h6>
-                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+                    <h6>Rating: </h6>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                aria-controls="home" aria-selected="true">Recently Watched</a> {{-- About --}}
+                                aria-controls="home" aria-selected="true">Profile</a> {{-- About --}}
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                                aria-controls="profile" aria-selected="false">Recent Reviews</a> {{-- Timeline --}}
+                                aria-controls="profile" aria-selected="false">History</a> {{-- Timeline --}}
                         </li>
                     </ul>
                 </div>
@@ -47,7 +44,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="profile-work">
+                <!-- <div class="profile-work">
                     <p>WORK LINK</p>
                     <a href="">Website Link</a><br />
                     <a href="">Bootsnipp Profile</a><br />
@@ -58,7 +55,7 @@
                     <a href="">WordPress</a><br />
                     <a href="">WooCommerce</a><br />
                     <a href="">PHP, .Net</a><br />
-                </div>
+                </div> -->
             </div>
             <div class="col-md-8">
                 <div class="tab-content profile-tab" id="myTabContent">
@@ -89,20 +86,13 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Phone</label>
+                                <label>Birth Date</label>
                             </div>
                             <div class="col-md-6">
                                 <p>{{ $user->birthdate }}</p>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Profession</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>{{ $user->password }}</p>
-                            </div>
-                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Average Ratings</label>

@@ -9,7 +9,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col mb-3">
-                <a href="{{ url()->previous() }}" class="btn btn-primary float-right">Cancel</a>
+                <a href="{{ url('admin/movies') }}" class="btn btn-primary float-left">Back to movies</a>
                 {{-- {{ link_to_route('movies.create', "Add Movie", '', ['class' => 'btn btn-info float-right']) }} --}}
             </div>
         </div>
