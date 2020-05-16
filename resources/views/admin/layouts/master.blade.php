@@ -91,7 +91,7 @@
             </div>
         </nav>
 
-        <div class="content">
+        <div class="content" style="padding: 0 15px">
             <div class="container-fluid">
                 @yield('content')
             </div>
@@ -101,7 +101,7 @@
                 <div class="copyright pull-right">
                     &copy;
                     <script>document.write(new Date().getFullYear())</script>
-                    &COPY; <i class="fa fa-heart heart"></i> by <a href="{{url('/')}} ">Laramax</a>
+                    <i class="fa fa-heart heart"></i> by <a href="{{url('/')}} ">Laramax</a>
                 </div>
             </div>
         </footer>

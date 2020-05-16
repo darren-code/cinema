@@ -62,7 +62,7 @@ class UserController extends Controller
         $user->username = $username;
         $user->password = $password;
         $user->birthdate = $birthdate;
-        $user->photo = 'default.jpg';
+        $user->photo = 'default.png';
 
         $user->save();
 
@@ -73,6 +73,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+
         $this->validate($request, [
             'username' => 'required',
             'password' => 'required',

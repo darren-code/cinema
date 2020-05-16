@@ -22,14 +22,16 @@ class AdminUserController extends Controller
             'email'=>'required|email',
             'password'=>'required'
         ]);
+
         // Log the User in
         $credentials = $request->only('email','password');
         
         if(!Auth::guard('admin')->attempt($credentials)){
             return back()->withErrors([
-                'message'=>'Wrong credentials. Please Try again!',
+                'message'=>'Wrong credentials. Please try again!',
             ]);
         }
+
         // Session Message
         session()->flash('msg','You have been logged in');
 

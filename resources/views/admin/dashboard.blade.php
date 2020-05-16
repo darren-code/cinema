@@ -25,7 +25,9 @@
                     <div class="footer">
                         <hr/>
                         <div class="stats">
-                            <i class="fad fa-info-square"></i> Details
+                            <a href="{{url('/admin/studio')}}">
+                                <i class="fad fa-info-square"></i> Details
+                            </a>
                         </div>
                     </div>
                 </div>

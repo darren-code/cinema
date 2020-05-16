@@ -31,10 +31,10 @@
                 Showtimes
             </h5>
             @if (!empty($shows))
-                @foreach ($shows as $data)
-                    <button class="btn btn-primary">
-                        {{ $data->time }}
-                    </button>
+                @foreach ($shows->unique('time') as $data)
+                    <a class="btn btn-outline-dark" href="{{ route('movie.seat', ['id' => $movie->id, 'time' => $data->time]) }}">
+                        {{ date('G.i', strtotime($data->time)) }}
+                    </a>
                 @endforeach
             @endif
         </div>

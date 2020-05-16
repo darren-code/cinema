@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Movie;
-use File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +27,7 @@ class MovieController extends Controller
     }
     public function destroy($id)
     {
-        // Delete Product
+        // Delete Movie
         Movie::destroy($id);
 
         // Store message
@@ -39,14 +38,12 @@ class MovieController extends Controller
     }
     public function edit($id)
     {
-        // Edit Product
+        // Edit Movie
         $movies = Movie::find($id);
         return view('admin.movies.edit ', compact('movies'));
     }
     public function store(Request $req)
     {
-        // dd($req->all());
-
         // Validate Form
         $req->validate([
             'title'=>'required',
@@ -85,10 +82,9 @@ class MovieController extends Controller
     }
     public function update(Request $req, $id)
     {
-        // dd(storage_path('app/poster'));
-
-        // Find product
+        // Find Movie
         $movies = Movie::find($id);
+
         // Validate form
         $req->validate([
             'title'=>'required',
@@ -101,7 +97,7 @@ class MovieController extends Controller
             'trailer' => 'required',
         ]);
 
-                // Check if there is any image
+        // Check if there is any image
         // if($req->hasFile('image')){
         //     //Check if the old image exists inside folder
         //     if(file_exists(public_path('uploads/').$movies->image)){
@@ -123,7 +119,7 @@ class MovieController extends Controller
     
             $req->poster->move(storage_path('app/poster'), $imageName);
 
-            // Update product
+            // Update Movie
             $movies->update([
                 'title' => $req->title,
                 'director'=> $req->director,
@@ -186,24 +182,32 @@ class MovieController extends Controller
                     ->join('studios', 'playing_relation.studio', '=', 'studios.id')
                     ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
                     ->select('studios.*', 'showtimes.*', 'movies.*')
-                    ->where('movies.id', $id)
+                    ->orderBy('time')
+                    ->where('movies.id',$id)
                     ->get();
-
-        // $related = DB::table('playing_relation')->where('movie', $id)->get();
-        // foreach($related as $row)
-        // {
-
-        // }
-        // $studio = DB::table('studios')->where('id', $related->studio)->get();
-        // foreach($related as $row)
-        // {
-
-        // }
-        // $showtime = DB::table('showtimes')->where('id', $related->showtime)->get();
 
         return view('front.movie', [
             'movie' => Movie::where('id', $id)->first(),
             'shows' => $related
+        ]);
+    }
+
+    public function seats($id, $time)
+    {
+        $related = DB::table('playing_relation')
+                    ->join('movies', 'playing_relation.movie', '=', 'movies.id')
+                    ->join('studios', 'playing_relation.studio', '=', 'studios.id')
+                    ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
+                    ->select('studios.*', 'showtimes.*', 'movies.*')
+                    ->orderBy('name')
+                    ->where('movies.id', $id)
+                    ->where('showtimes.time', $time)
+                    ->get();
+
+        return view('front.seat', [
+            'movie' => Movie::where('id', $id)->first(),
+            'shows' => $related,
+            'time' => $time
         ]);
     }
 }
