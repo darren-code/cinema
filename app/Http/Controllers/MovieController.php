@@ -162,7 +162,7 @@ class MovieController extends Controller
         $now_showing = Movie::where('avail', 1)->orderBy('released', 'desc')->take(4)->get();
         $coming_soon = Movie::where('avail', 2)->orderBy('released', 'desc')->take(4)->get();
         $more_result = Movie::where('avail', 1)->orderBy('released', 'desc')->take(8)->get();
-        return view('front/home', [
+        return view('front.movie.home', [
             'nowready' => $now_showing,
             'upcoming' => $coming_soon,
             'morefilm' => $more_result,
@@ -186,7 +186,7 @@ class MovieController extends Controller
                     ->where('movies.id',$id)
                     ->get();
 
-        return view('front.movie', [
+        return view('front.movie.movie', [
             'movie' => Movie::where('id', $id)->first(),
             'shows' => $related
         ]);
@@ -204,10 +204,17 @@ class MovieController extends Controller
                     ->where('showtimes.time', $time)
                     ->get();
 
-        return view('front.seat', [
+        return view('front.movie.seat', [
             'movie' => Movie::where('id', $id)->first(),
             'shows' => $related,
             'time' => $time
+        ]);
+    }
+
+    public function movie()
+    {
+        return view('front.movie.index', [
+            'movies' => Movie::orderBy('released', 'desc')->take(20)->get()
         ]);
     }
 }

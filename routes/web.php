@@ -22,6 +22,11 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'home',
         ]);
 
+        Route::get('/movie', [
+            'uses' => 'MovieController@movie',
+            'as' => 'movie'
+        ]);
+
         Route::get('/movie/{id}', [
             'uses' => 'MovieController@details',
             'as' => 'movie.details'
@@ -95,6 +100,8 @@ Route::group(['middleware' => ['web']], function () {
             Route::resource('/studio','StudioController');
             Route::get('/studio/details/{id}','StudioController@details')->name('studio.details');
             Route::get('/studio/seat/{id}/time/{time}','StudioController@seat')->name('studio.seat');
+            Route::get('/studio/create','StudioController@create')->name('studio.create');
+            Route::post('/studio/create','StudioController@store');
 
             // Movie
             Route::resource('/movies','MovieController');

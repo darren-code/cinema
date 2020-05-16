@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('page')
-    Edit Movie
+    Create Studio   
 @endsection
 
 @section('content')
@@ -10,25 +10,22 @@
         @include('admin.layouts.message')
         <div class="row">
             <div class="col mb-3">
-                <a href="{{ url('admin/movies') }}" class="btn btn-primary float-left">Back to movies</a>
+                <a href="{{ url('admin/studio') }}" class="btn btn-primary float-left">Back to Studio</a>
             </div>
         </div>
         <div class="card">
             <div class="header">
-                <h4 class="title">Edit Movie</h4>
+                <h4 class="title">Add Studio</h4>
             </div>
             <div class="content">
-                {{ Form::open(['url'=>[ 'admin/movies',$movies->id], 'files' => 'true', 'method' => 'put']) }} 
+                {!!Form::open(['url'=>'/admin/studio'])!!} 
                     <div class="row">
                         <div class="col-md-12">
-
-                            @include('admin.movies._field')
+                            @include('admin.studio._field')
                             <div class="form-group">
-                                {{ Form::submit('Update Movie', ['class'=>'btn btn-info btn-fill btn-wd']) }}
+                                {{ Form::submit('Add Studio',['class'=>'btn btn-info btn-fill btn-wd'])}}
                             </div>
-
                         </div>
-
                     </div>
                     <div class="clearfix">
 

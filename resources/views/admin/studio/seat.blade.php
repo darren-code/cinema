@@ -5,6 +5,8 @@ Studio Layout
 @endsection
 
 @section('content')
+<a href="{{url('/admin/studio/details/'.$title[0]->id)}}" class="btn btn-success">Back to Studio</a>
+<br><br>
 <div class="row">
     <div class="col-md-12">
         <div class="card">

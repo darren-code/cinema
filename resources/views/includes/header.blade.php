@@ -1,8 +1,8 @@
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<header style="font-family: Montserrat">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="box-shadow:0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3)">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{{url('home')}}">Laramax</a>
+                <a class="navbar-brand" href="{{url('/')}}">Laramax</a>
             </div>
             
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#burger-content" aria-controls="burger-content" aria-expanded="false">
@@ -10,27 +10,20 @@
             </button>
 
             <div class="collapse navbar-collapse" id="burger-content">
-                <form class="form-inline my-2 my-lg-0">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="search" placeholder="I'm Looking for ..." aria-label="Recipient's username" aria-describedby="search">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="search"><i class="fad fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
+                
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('movies')}}" id="" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="fad fa-clipboard-user"></i> Movies
+                        <a class="nav-link" href="{{ url('movie') }}" id="" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fad fa-clipboard-user"></i> Browse Movies
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('booking')}}" id="" role="button" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="{{ url('booking') }}" id="" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="fad fa-graduation-cap"></i> My Bookings
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('favourite')}}" id="" role="button" {{-- data-toggle="" --}} aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="{{ url('favourite') }}" id="" role="button" {{-- data-toggle="" --}} aria-haspopup="true" aria-expanded="false">
                             <i class="fad fa-brain"></i> Favourite
                         </a>
                     </li>

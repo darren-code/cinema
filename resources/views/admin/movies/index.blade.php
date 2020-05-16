@@ -53,9 +53,9 @@ Movies
                                 <td><img src="{{ route('movie.poster', ['filename' => $p->poster]) }}" alt="" class="img-thumbnail" style="width: 50px"></td>
                                 <td>
                                     {{Form::open(['route'=>['movies.destroy',$p->id],'method'=>'DELETE'])}}
-                                        {{Form::button('',['class'=>'btn btn-danger btn-sm fad fa-trash-alt','type'=>'submit','onclick'=>'return confirm("Are you sure you want to delete this?")'])}}
-                                        {{link_to_route('movies.edit','',$p->id,['class'=>'btn btn-info btn-sm fad fa-edit']) }}
                                         {{link_to_route('movies.show','',$p->id,['class'=>'btn btn-info btn-sm fad fa-info-square'])}}
+                                        {{link_to_route('movies.edit','',$p->id,['class'=>'btn btn-info btn-sm fad fa-edit']) }}
+                                        {{Form::button('',['class'=>'btn btn-danger btn-sm fad fa-trash-alt','type'=>'submit','onclick'=>'return confirm("Are you sure you want to delete this?")'])}}
                                     {{Form::close()}}
                                 </td>
                             </tr>

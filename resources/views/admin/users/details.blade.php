@@ -7,6 +7,8 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
+        <a href="{{url('/admin/users')}}" class="btn btn-success">Back to Users</a>
+        <br><br>
         <div class="card">
             <div class="header">
                 <h4 class="title">User Details</h4>
@@ -98,5 +100,4 @@
         </div>
     </div>
 </div>
-<a href="{{url('/admin/users')}}" class="btn btn-success">Back to Users</a>
 @endsection
