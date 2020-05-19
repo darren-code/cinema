@@ -42,15 +42,25 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $this->validate($request, [
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'gender' => 'required',
+            'phone' => 'required|regex:/(08)[0-9]{9}/',
             'username' => 'required|min:6|unique:users',
             'email' => 'required|email|unique:users', // Works on associative array too
             'birthdate' => 'required|date|before:-3 years', // Restriksi Umur
             'password' => 'required|min:4',
         ], [
-            'birthdate.before' => 'You are not old enough to register!' // Custom Error Message
+            'birthdate.before' => 'You are not old enough to register!', // Custom Error Message
+            'phone.regex' => 'Please type a valid phone number.',
         ]);
             // dd(preg_replace('/(\D)/','',Uuid::uuid1()));
-        $id = substr(preg_replace('/(\D)/','',Uuid::uuid3(Uuid::NAMESPACE_DNS,$request['username'])),0,8);
+        $id = substr(preg_replace('/(\D)/','',Uuid::uuid3(Uuid::NAMESPACE_DNS,$request['username'])), 0, 8);
+
+        $firstname = $request['firstname'];
+        $lastname = $request['lastname'];
+        $phone = $request['phone'];
+        $gender = $request['gender'];
         $username = $request['username'];
         $email = $request['email'];
         $birthdate = $request['birthdate'];
@@ -59,6 +69,10 @@ class UserController extends Controller
         $user = new User();
         $user->id = $id;
         $user->email = $email;
+        $user->firstname = $firstname;
+        $user->lastname = $lastname;
+        $user->phone = $phone;
+        $user->gender = $gender;
         $user->username = $username;
         $user->password = $password;
         $user->birthdate = $birthdate;
@@ -102,7 +116,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        return view('front.profile', [
+        return view('front.user.profile', [
             'user' => Auth::user()
         ]);
     }

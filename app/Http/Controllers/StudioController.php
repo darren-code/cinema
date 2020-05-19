@@ -17,14 +17,15 @@ class StudioController extends Controller
     public function details($id)
     {
         $title = DB::table('studios as s')
-            ->where('id',$id)
+            ->where('s.id',$id)
             ->get();
 
         $studio = DB::table('studios as s')
             ->join('playing_relation as pr','s.id','=','pr.studio')
             ->join('movies as m','m.id','=','pr.movie')
             ->join('showtimes as st','st.id','=','pr.showtime')
-            ->select('s.id','s.name','m.title','st.time')
+            ->join('branch as b','b.id','=','pr.branch')
+            ->select('s.id','s.name','m.title','st.time','b.location')
             ->orderBy('time')
             ->where('s.id',$id)
             ->get();
@@ -35,9 +36,10 @@ class StudioController extends Controller
     {
         $title = DB::table('studios as s')
             ->join('playing_relation as pr','s.id','=','pr.studio')
+            ->join('branch as b','b.id','=','pr.branch')
             ->join('movies as m','m.id','=','pr.movie')
             ->join('showtimes as st','st.id','=','pr.showtime')
-            ->select('s.id','s.name','m.title','st.time')
+            ->select('s.id','s.name','m.title','st.time','b.location')
             ->where('s.id',$id)
             ->where('st.time',$time)
             ->get();

@@ -157,6 +157,42 @@ class MovieController extends Controller
     /*
         User Panel
     */
+
+    public function home()
+    {
+        return view('front.movie.home', [
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get()
+        ]);
+    }
+
+    public function home_location($branch, Request $request)
+    {
+        $data = DB::table('playing_relation')
+            ->join('movies', 'playing_relation.movie', '=', 'movies.id')
+            ->join('branch', 'playing_relation.branch', '=', 'branch.id')
+            ->select('movies.*', 'branch.*')
+            ->where('branch.id', $branch)
+            ->orderBy('movies.released', 'desc');
+
+        /*
+        $data = DB::table('playing_relation as p')
+            ->join('branch as b', 'p.branch', '=', 'b.id')
+            ->join('movies as m', 'p.movie', '=', 'm.id')
+            ->join('studios as s', 'p.studio', '=', 's.id')
+            ->join('showtimes as t', 'p.showtime', '=', 't.id')
+            ->select('s.*', 'b.*', 'm.*', 't.*', 'p.*')->get();
+        */
+
+        $request->session()->put('location', $branch);
+        
+        return view('front.movie.home', [
+            'nowready' => $data->where('movies.avail', 1)->take(4)->get(),
+            'upcoming' => $data->where('movies.avail', 2)->take(4)->get(),
+            'morefilm' => $data->where('movies.avail', 1)->take(8)->get()
+        ]);
+    }
+
+    /*
     public function home()
     {
         $now_showing = Movie::where('avail', 1)->orderBy('released', 'desc')->take(4)->get();
@@ -168,6 +204,7 @@ class MovieController extends Controller
             'morefilm' => $more_result,
         ]);
     }
+    */
 
     public function poster($filename)
     {

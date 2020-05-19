@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2020 at 03:06 PM
+-- Generation Time: May 18, 2020 at 04:24 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -44,6 +44,30 @@ CREATE TABLE `admin_users` (
 INSERT INTO `admin_users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'John Doe', 'john@example.com', '$2y$12$hkOZYULXfsgeT0F0H6VP4eJ1HKxXBIVQ3HIJE2GoCNmv7fCd5cOYm', NULL, NULL, NULL),
 (2, 'Me', 'admin@umn.ac.id', '$2y$12$hkOZYULXfsgeT0F0H6VP4eJ1HKxXBIVQ3HIJE2GoCNmv7fCd5cOYm', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `branch`
+--
+
+CREATE TABLE `branch` (
+  `id` int(16) NOT NULL,
+  `location` varchar(64) DEFAULT NULL,
+  `country` varchar(64) DEFAULT NULL,
+  `state` varchar(64) DEFAULT NULL,
+  `province` varchar(64) DEFAULT NULL,
+  `town` varchar(64) DEFAULT NULL,
+  `zip_code` varchar(8) DEFAULT NULL,
+  `address` varchar(512) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `branch`
+--
+
+INSERT INTO `branch` (`id`, `location`, `country`, `state`, `province`, `town`, `zip_code`, `address`) VALUES
+(1, 'Universe', 'Indonesia', 'Banten', 'Tangerang', 'Gading Serpong', '15315', 'Scientia Boulevard');
 
 -- --------------------------------------------------------
 
@@ -207,21 +231,22 @@ CREATE TABLE `playing_relation` (
   `id` int(16) NOT NULL,
   `studio` int(16) NOT NULL,
   `movie` int(16) NOT NULL,
-  `showtime` int(16) NOT NULL
+  `showtime` int(16) NOT NULL,
+  `branch` int(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `playing_relation`
 --
 
-INSERT INTO `playing_relation` (`id`, `studio`, `movie`, `showtime`) VALUES
-(3, 1, 1, 1),
-(4, 2, 28, 3),
-(5, 2, 28, 4),
-(6, 2, 28, 1),
-(7, 2, 28, 2),
-(8, 3, 28, 3),
-(9, 1, 28, 3);
+INSERT INTO `playing_relation` (`id`, `studio`, `movie`, `showtime`, `branch`) VALUES
+(3, 1, 1, 1, 1),
+(4, 2, 28, 3, 1),
+(5, 2, 28, 4, 1),
+(6, 2, 28, 1, 1),
+(7, 2, 28, 2, 1),
+(8, 3, 28, 3, 1),
+(9, 1, 28, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -292,7 +317,7 @@ INSERT INTO `showtimes` (`id`, `time`) VALUES
 
 CREATE TABLE `studios` (
   `id` int(16) NOT NULL,
-  `name` varchar(4) NOT NULL,
+  `name` varchar(30) NOT NULL,
   `class` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -301,10 +326,10 @@ CREATE TABLE `studios` (
 --
 
 INSERT INTO `studios` (`id`, `name`, `class`) VALUES
-(1, 'A', 1),
-(2, 'B', 2),
-(3, 'C', 2),
-(4, 'D', 2);
+(1, 'Mars', 1),
+(2, 'Saturn', 2),
+(3, 'Earth', 2),
+(4, 'Jupyter', 2);
 
 -- --------------------------------------------------------
 
@@ -361,6 +386,7 @@ CREATE TABLE `users` (
   `firstname` varchar(128) NOT NULL,
   `lastname` varchar(128) DEFAULT NULL,
   `gender` varchar(8) NOT NULL,
+  `phone` varchar(16) NOT NULL,
   `username` varchar(32) NOT NULL,
   `password` varchar(64) NOT NULL,
   `email` varchar(128) NOT NULL,
@@ -376,16 +402,24 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `gender`, `username`, `password`, `email`, `birthdate`, `photo`, `bio`, `created`, `updated`, `remember_token`) VALUES
-(1, 'Darren', 'Grunt', 'Male', 'darren', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'darren@mail.com', '1912-12-12', 'default.png', NULL, '2020-05-11 17:34:18', '2020-05-16 11:37:45', '4KeUEJRDx2BYwRcZvmIPtTkUPwCiwoPUUQ1KnDEXThlOUJ26ikPMZ6rs37DE'),
-(2, 'Default', 'Default\r\n', 'Male', 'zerowu49', '$2y$10$NAMohNFouQwxs.tASrT4.u2X1svPd6S5LBxghbJlPTbFNvG23YH6u', 'admin@umn.ac.id', '2010-02-16', 'default.png', NULL, '2020-05-12 15:17:53', '2020-05-16 11:07:59', ''),
-(3, 'John', 'Doe', 'Male', 'johndoe', '$2y$10$yFwRNKGCA9zQlJNUpDmUJ.r5MLmNiS99wnx3H82LdY8h01z3/yYXC', 'johndoe@mail.com', '2000-02-18', 'default.png', NULL, '2020-05-14 02:13:45', '2020-05-16 11:07:35', NULL),
-(47850843, 'Laramax', 'Clinton', 'Female', 'laramax', '$2y$10$Wbp29X8PfPMV8cCdGrEjNu6nPsBOWDpXKdvZ52xLg6Jurox6fjt3G', 'laramax@umn.ac.id', '2000-05-14', 'default.png', NULL, '2020-05-14 02:55:10', '2020-05-16 11:08:51', NULL),
-(66914536, 'Avenger', 'Simpson', 'Female', 'mantis', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'avengers@mail.com', '1999-07-10', 'default.png', NULL, '2020-05-14 07:57:14', '2020-05-16 11:09:51', NULL);
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `gender`, `phone`, `username`, `password`, `email`, `birthdate`, `photo`, `bio`, `created`, `updated`, `remember_token`) VALUES
+(1, 'Darren', 'Grunt', 'Male', '08123456789', 'darren', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'darren@mail.com', '1912-12-12', 'default.png', NULL, '2020-05-11 17:34:18', '2020-05-18 19:10:04', '3SsQZP6baAWlXCCBaMt0oJt2sFFtUPYnzy9qMx9Sk5UyPG1e2EISIhwpDxy3'),
+(2, 'Default', 'Default\r\n', 'Male', '08123456789', 'zerowu49', '$2y$10$NAMohNFouQwxs.tASrT4.u2X1svPd6S5LBxghbJlPTbFNvG23YH6u', 'admin@umn.ac.id', '2010-02-16', 'default.png', NULL, '2020-05-12 15:17:53', '2020-05-18 19:10:04', ''),
+(3, 'John', 'Doe', 'Male', '08123456789', 'johndoe', '$2y$10$yFwRNKGCA9zQlJNUpDmUJ.r5MLmNiS99wnx3H82LdY8h01z3/yYXC', 'johndoe@mail.com', '2000-02-18', 'default.png', NULL, '2020-05-14 02:13:45', '2020-05-18 19:10:04', NULL),
+(47850843, 'Laramax', 'Clinton', 'Female', '08123456789', 'laramax', '$2y$10$Wbp29X8PfPMV8cCdGrEjNu6nPsBOWDpXKdvZ52xLg6Jurox6fjt3G', 'laramax@umn.ac.id', '2000-05-14', 'default.png', NULL, '2020-05-14 02:55:10', '2020-05-18 19:10:04', NULL),
+(63154194, 'Chendra', 'Dewangga', 'Male', '08123456789', 'Nirvash', '$2y$10$GoqH2w37FdZH2He/YjfdVubg4sxd/aPd3vO/M4zSYxp1FAgzOnNvO', 'chendra.dewangga@gmail.com', '2000-09-12', 'default.png', NULL, '2020-05-18 12:31:39', '2020-05-18 19:31:39', NULL),
+(66914536, 'Avenger', 'Simpson', 'Female', '08123456789', 'mantis', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'avengers@mail.com', '1999-07-10', 'default.png', NULL, '2020-05-14 07:57:14', '2020-05-18 19:10:04', NULL),
+(98433622, 'Nirvash', 'Nirvash', 'Male', '081234567890', 'Nirvash777', '$2y$10$J42FI70/AjuDmjzC11HAXOrTw3TdER1ndTLT8qNnSXdGdJry8VJ5W', 'Nirvash@mail', '2000-12-12', 'default.png', NULL, '2020-05-18 12:34:45', '2020-05-18 19:34:45', NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `branch`
+--
+ALTER TABLE `branch`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `casts`
@@ -436,7 +470,8 @@ ALTER TABLE `playing_relation`
   ADD PRIMARY KEY (`id`),
   ADD KEY `movie` (`movie`),
   ADD KEY `showtime` (`showtime`),
-  ADD KEY `studio` (`studio`);
+  ADD KEY `studio` (`studio`),
+  ADD KEY `branch` (`branch`);
 
 --
 -- Indexes for table `reviews`
@@ -488,6 +523,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `branch`
+--
+ALTER TABLE `branch`
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `casts`
@@ -553,7 +594,7 @@ ALTER TABLE `showtimes`
 -- AUTO_INCREMENT for table `studios`
 --
 ALTER TABLE `studios`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tickets`
@@ -571,7 +612,7 @@ ALTER TABLE `transaction`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66914537;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98433623;
 
 --
 -- Constraints for dumped tables
@@ -604,7 +645,8 @@ ALTER TABLE `paid_tickets`
 ALTER TABLE `playing_relation`
   ADD CONSTRAINT `playing_relation_ibfk_1` FOREIGN KEY (`movie`) REFERENCES `movies` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `playing_relation_ibfk_2` FOREIGN KEY (`showtime`) REFERENCES `showtimes` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `playing_relation_ibfk_3` FOREIGN KEY (`studio`) REFERENCES `studios` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `playing_relation_ibfk_3` FOREIGN KEY (`studio`) REFERENCES `studios` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `playing_relation_ibfk_4` FOREIGN KEY (`branch`) REFERENCES `branch` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `review_relation`

@@ -12,6 +12,7 @@ Studio Layout
         <div class="card">
             <div class="header">
                 <h4 class="title">Studio {{$title[0]->name." - ".$title[0]->title." - ".$title[0]->time}} </h4>
+                <p class="category">Branch: {{$title[0]->location}} </p>
             </div>
             <div class="content table-responsive table-full-width">
                 @if(isset($studio[0]))

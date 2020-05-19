@@ -23,8 +23,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('favourite') }}" id="" role="button" {{-- data-toggle="" --}} aria-haspopup="true" aria-expanded="false">
-                            <i class="fad fa-brain"></i> Favourite
+                        <a class="nav-link" href="{{ url('favourite') }}" id="branch-selector" role="button" data-toggle="modal" data-target="#location-selector" aria-haspopup="true" aria-expanded="false">
+                            <i class="fad fa-brain"></i> Change Location
                         </a>
                     </li>
                     @if(Auth::check())

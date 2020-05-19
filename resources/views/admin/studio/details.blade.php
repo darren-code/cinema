@@ -12,6 +12,9 @@
         <div class="card">
             <div class="header">
                 <h4 class="title">Studio {{$title[0]->name}} History</h4>
+                @if(isset($studio[0]))
+                <p class="category">Branch: {{$studio[0]->location}} </p>
+                @endif
             </div>
             <div class="content table-responsive table-full-width">
                 @if(isset($studio[0]))
@@ -37,7 +40,8 @@
                     @endforeach
                 @else
                     <p class="text-center">
-                        No History yet
+                        Studio is not allocated. Click button below to add playing relation
+                        <br>
                     </p>
                 @endif
             </div>

@@ -23,7 +23,7 @@ class TicketController extends Controller
     {
         $req->validate([
             'name'=>'required',
-            // to be continued as db
+            // to be continued as we speak db
         ]);
     }
 }

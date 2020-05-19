@@ -39,3 +39,11 @@
 @section('footer')
     {{-- Hide --}}
 @stop
+
+@section('location-selector')
+    {{-- Exclude --}}
+@stop
+
+@section('header-script')
+    {{-- Exclude --}}
+@stop

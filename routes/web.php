@@ -22,6 +22,13 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'home',
         ]);
 
+        /*
+        Route::get('/home/{branch}', [
+            'uses' => 'MovieController@home_location',
+            'as' => 'location',
+        ]);
+        */
+
         Route::get('/movie', [
             'uses' => 'MovieController@movie',
             'as' => 'movie'
@@ -63,6 +70,7 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'signout',
         ]);
 
+
     });
 
     // Route::get('/', function () {
@@ -78,6 +86,9 @@ Route::group(['middleware' => ['web']], function () {
         return view('register');
     })->name('register');
 
+    // Route::get('/about',function(){
+    //     return view('about');
+    // });
 
     Route::post('/signup', [
         'uses' => 'UserController@register', // Controller @ Function
@@ -102,6 +113,17 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/studio/seat/{id}/time/{time}','StudioController@seat')->name('studio.seat');
             Route::get('/studio/create','StudioController@create')->name('studio.create');
             Route::post('/studio/create','StudioController@store');
+
+            // Studio Allocation
+            Route::resource('/playing','PlayingController');
+            Route::get('/playing/details/{id}','PlayingController@details')->name('playing.details');
+            Route::get('/playing/create','PlayingController@create')->name('playing.create');
+
+            // Airtime
+            Route::resource('/showtime', 'ShowtimeController');
+
+            // Branch
+            Route::resource('/branch', 'BranchController');
 
             // Movie
             Route::resource('/movies','MovieController');
