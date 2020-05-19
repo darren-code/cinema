@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('page')
-    Airtime Details
+    Branch Details
 @endsection
 
 @section('content')
@@ -9,26 +9,76 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col mb-3">
-                <a href="{{ url('admin/showtime') }}" class="btn btn-primary float-left">Back to Airtime</a>
+                <a href="{{ url('admin/branch') }}" class="btn btn-primary float-left">Back to Branch</a>
             </div>
         </div>
         <div class="card">
             <div class="header">
-                <h4 class="title">Airtime Details</h4>
-                <p class="category">Airtime: {{$data->time}} </p>
+                <h4 class="title">Branch Information</h4>
             </div>
             <div class="content table-responsive table-full-width">
                 <table class="table table-striped">
-                    @if(isset($showtime[0]))
+                    <tbody>
+                        <tr>
+                            <th>ID Branch</th>
+                            <td>{{$data->id}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch Location</th>
+                            <td>{{$data->location}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch Country</th>
+                            <td>{{$data->country}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch State</th>
+                            <td>{{$data->state}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch Province</th>
+                            <td>{{$data->province}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch Town</th>
+                            <td>{{$data->town}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch Zip Code</th>
+                            <td>{{$data->zip_code}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Branch Address</th>
+                            <td>{{$data->address}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Studio(s) in Branch </h4>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-striped">
+                    @if(isset($branch[0]))
                     <thead>
                         <tr>
                             <th>Studio Name</th>
                             <th>Studio Class</th>
-                            <th>Studio Location</th>
                         </tr>
                     </thead>
                     <tbody>
-                            @foreach($showtime as $showtime => $value)
+                            @foreach($branch as $branch => $value)
                             <tr>
                                 <td>
                                     {{$value->name}}
@@ -40,15 +90,12 @@
                                         Classic
                                     @endif
                                 </td>
-                                <td>
-                                    {{$value->location}}
-                                </td>
                             </tr>
                             @endforeach
                     </tbody>
                     @else
                         <p class="text-center">
-                            No Studio Allocated yet
+                            No Studio found.
                             <br>
                         </p>
                     @endif

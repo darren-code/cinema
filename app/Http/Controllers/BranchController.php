@@ -44,13 +44,23 @@ class BranchController extends Controller
         // Validate Form
         $req->validate([
             'location' => 'required',
-            'location' => 'required',
-
+            'country' => 'required',
+            'state' => 'required',
+            'province' => 'required',
+            'town' => 'required',
+            'zip_code' => 'required|numeric',
+            'address' => 'required',
         ]);
 
         // Save data into database
         Branch::create([
-            'time' => $req->time,
+            'location' => $req->location,
+            'country' => $req->country,
+            'state' => $req->state,
+            'province' => $req->province,
+            'town' => $req->town,
+            'zip_code' => $req->zip_code,
+            'address' => $req->address,
         ]);
 
         // Session Message
@@ -74,11 +84,23 @@ class BranchController extends Controller
 
         // Validate form
         $req->validate([
-            'time'=>'required|unique:branch,time,'.$id.',id',
+            'location' => 'required',
+            'country' => 'required',
+            'state' => 'required',
+            'province' => 'required',
+            'town' => 'required',
+            'zip_code' => 'required|numeric',
+            'address' => 'required',
         ]);
 
         $branch->update([
-            'time' => $req->time,
+            'location' => $req->location,
+            'country' => $req->country,
+            'state' => $req->state,
+            'province' => $req->province,
+            'town' => $req->town,
+            'zip_code' => $req->zip_code,
+            'address' => $req->address,
         ]);
 
         // Store message session
@@ -92,12 +114,11 @@ class BranchController extends Controller
     {
         $data = Branch::find($id);
 
-        $branch = DB::table('branch as st')
-        ->join('playing_relation as pr','st.id','=','pr.branch')
+        $branch = DB::table('branch as b')
+        ->join('playing_relation as pr','b.id','=','pr.branch')
         ->join('studios as s','s.id','=','pr.studio')
-        ->join('branch as b','b.id','=','pr.branch')
-        ->select('st.time','s.name','s.class','b.location')
-        ->where('st.id',$id)
+        ->select('s.name','s.class')
+        ->where('b.id',$id)
         ->distinct('s.name')
         ->get();
 
