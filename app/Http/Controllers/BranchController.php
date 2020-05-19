@@ -43,7 +43,9 @@ class BranchController extends Controller
     {
         // Validate Form
         $req->validate([
-            'time' => 'required|unique:branch',
+            'location' => 'required',
+            'location' => 'required',
+
         ]);
 
         // Save data into database
