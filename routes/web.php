@@ -29,22 +29,39 @@ Route::group(['middleware' => ['web']], function () {
         ]);
         */
 
-        Route::get('/movie', [
+        Route::post('/search', [
+            'uses' => 'MovieController@browse',
+            'as' => 'search',
+        ]);
+
+        Route::get('/browse', [
+            'uses' => 'MovieController@browse_movies',
+            'as' => 'browse',
+        ]);
+
+        Route::get('/movie/{branch}', [
             'uses' => 'MovieController@movie',
             'as' => 'movie'
         ]);
 
-        Route::get('/movie/{id}', [
+        Route::get('/movie/{branch}/{id}', [
             'uses' => 'MovieController@details',
             'as' => 'movie.details'
         ]);
 
-        Route::get('/movie/{id}/{time}', [
+        Route::get('/movie/{branch}/{id}/{time}', [
             'uses' => 'MovieController@seats',
             'as' => 'movie.seat'
         ]);
 
-        Route::get('/profile', [
+        Route::get('/profile/edit/{id}', [
+            'uses' => 'UserController@edit',
+            'as' => 'user.edit'
+        ]);
+
+        // Route::post('profile/update','UserController@update');
+
+        Route::get('/profile/{id}', [
             'uses' => 'UserController@profile',
             'as' => 'profile'
         ]);
@@ -109,15 +126,11 @@ Route::group(['middleware' => ['web']], function () {
             
             // Studio
             Route::resource('/studio','StudioController');
-            Route::get('/studio/details/{id}','StudioController@details')->name('studio.details');
             Route::get('/studio/seat/{id}/time/{time}','StudioController@seat')->name('studio.seat');
-            Route::get('/studio/create','StudioController@create')->name('studio.create');
-            Route::post('/studio/create','StudioController@store');
+            // Route::get('/studio/details/{id}','StudioController@details')->name('studio.details');
 
             // Studio Allocation
             Route::resource('/playing','PlayingController');
-            Route::get('/playing/details/{id}','PlayingController@details')->name('playing.details');
-            Route::get('/playing/create','PlayingController@create')->name('playing.create');
 
             // Airtime
             Route::resource('/showtime', 'ShowtimeController');
@@ -130,9 +143,7 @@ Route::group(['middleware' => ['web']], function () {
             
             // Orders
             Route::resource('/order','OrderController');
-            // Route::get('/confirm/{id}','OrderController@confirm')->name('order.confirm');
-            // Route::get('/pending/{id}','OrderController@pending')->name('order.pending');
-            // Route::get('/detail/{id}','OrderController@detail')->name('order.detail');
+            Route::get('/order/confirm/{id}','OrderController@approve')->name('order.approve');
             
             // Users
             Route::resource('/users','UserController');

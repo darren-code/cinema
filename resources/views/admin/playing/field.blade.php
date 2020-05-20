@@ -1,9 +1,28 @@
+@php 
+    if(isset($playing[0])){
+        $studio_id = $playing[0]->studio_id;
+        $mov_id = $playing[0]->mov_id;
+        $st_id = $playing[0]->st_id;
+        $loc_id = $playing[0]->loc_id;
+
+    } else{
+        $studio_id = 0;
+        $mov_id = 0;
+        $st_id = 0;
+        $loc_id = 0;
+    }
+@endphp
+
 <div class="form-group {{ $errors->has('studio') ? 'has-error' :'' }}">
     {{ Form::label('studio','Studio Name:')}}
     <select class="form-control border-input" name="studio">
-        <option value="" selected="selected">Choose It</option>
+        @php 
+            if($studio_id==0){
+                echo "<option value='' selected>Choose it</option>";
+            }
+        @endphp
         @foreach($data_studio as $data_studio => $s)
-            <option value="{{$s->id}}">
+            <option value="{{$s->id}}" {{ $studio_id == $s->id ? 'selected': ''}}>
                 {{$s->name}}
             </option>
         @endforeach
@@ -14,9 +33,13 @@
 <div class="form-group {{ $errors->has('movie') ? 'has-error' :'' }}">
     {{ Form::label('movie','Movie Title:')}}
     <select class="form-control border-input" name="movie">
-        <option value="" selected="selected">Choose It</option>
+        @php 
+            if($mov_id==0){
+                echo "<option value='' selected>Choose it</option>";
+            }
+        @endphp
         @foreach($data_movie as $data_movie => $s)
-            <option value="{{$s->id}}">
+            <option value="{{$s->id}}" {{ $mov_id == $s->id ? 'selected': ''}}>
                 {{$s->title}}
             </option>
         @endforeach
@@ -27,10 +50,14 @@
 <div class="form-group {{ $errors->has('showtime') ? 'has-error' :'' }}">
     {{ Form::label('showtime','Airtime:')}}
     <select class="form-control border-input" name="showtime">
-        <option value="" selected="selected">Choose It</option>
+        @php 
+            if($st_id==0){
+                echo "<option value='' selected>Choose it</option>";
+            }
+        @endphp
         @foreach($data_showtime as $data_showtime => $s)
-            <option value="{{$s->id}}">
-                {{$s->time}}
+            <option value="{{$s->id}}" {{ $st_id == $s->id ? 'selected': ''}}>
+                {{substr($s->time,0,5)}}
             </option>
         @endforeach
     </select>
@@ -40,9 +67,13 @@
 <div class="form-group {{ $errors->has('branch') ? 'has-error' :'' }}">
     {{ Form::label('branch','Branch Location:')}}
     <select class="form-control border-input" name="branch">
-        <option value="" selected="selected">Choose It</option>
+        @php 
+            if($loc_id==0){
+                echo "<option value='' selected>Choose it</option>";
+            }
+        @endphp
         @foreach($data_branch as $data_branch => $s)
-            <option value="{{$s->id}}">
+            <option value="{{$s->id}}" {{ $loc_id == $s->id ? 'selected': ''}}>
                 {{$s->location}}
             </option>
         @endforeach
@@ -51,5 +82,5 @@
 </div>
 
 <div class="form-group">
-    {{ Form::submit('Add Studio Allocation',['class'=>'btn btn-info btn-fill btn-wd'])}}
+    {{ Form::submit('Edit Studio Allocation',['class'=>'btn btn-info btn-fill btn-wd'])}}
 </div>

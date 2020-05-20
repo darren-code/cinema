@@ -11,10 +11,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="header">
-                <h4 class="title">{{$users[0]->username}}'s Orders Details</h4>
-                <p class="category">List of {{$users[0]->username}}'s Orders Details</p>
+                <h4 class="title">Orders Details</h4>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -23,15 +22,16 @@
                             <th>Payment Method </th>
                             <th>Order Time</th>
                             <th>Status</th>
+                            <!-- <th>Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($order as $o)
+                        @foreach($order as $order => $value)
                         <tr>
-                            <td>{{$order[0]->id}}</td>
-                            <td>{{$order[0]->total}}</td>
-                            <td>{{$order[0]->method}}</td>
-                            <td>{{$order[0]->time}}</td>
+                            <td>{{$value->id}}</td>
+                            <td>{{$value->total}}</td>
+                            <td>{{$value->method}}</td>
+                            <td>{{$value->time}}</td>
                             <td>
                                 @if(isset($orders[0]->payment))
                                     <span for="" class="label label-success">Confirmed</span>
@@ -39,6 +39,9 @@
                                     <span for="" class="label label-warning">Pending</span>
                                 @endif
                             </td>
+                            <!-- <td>
+                                {{link_to_route('order.approve','Approve',$value->id,['class'=>'btn btn-info btn-sm '])}}
+                            </td> -->
                         </tr>
                         @endforeach
                     </tbody>

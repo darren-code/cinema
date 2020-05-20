@@ -10,7 +10,12 @@
         @include('admin.layouts.message')
         <div class="row">
             <div class="col mb-3">
-                {{ link_to_route('playing.index', "Studio Allocation", '', ['class' => 'btn btn-info float-right ']) }}
+                {{ link_to_route('branch.index', "Branch", '', ['class' => 'btn btn-info  ']) }}
+                &nbsp;
+                {{ link_to_route('showtime.index', "Airtime", '', ['class' => 'btn btn-info  ']) }}
+                &nbsp;
+                {{ link_to_route('playing.index', "Studio Allocation", '', ['class' => 'btn btn-info  ']) }}
+
                 {{ link_to_route('studio.create', "Add Studio", '', ['class' => 'btn btn-info float-right ']) }}
             </div>
         </div>
@@ -43,7 +48,7 @@
                                 </td>
                                 <td>
                                     {{Form::open(['route'=>['studio.destroy',$s->id],'method'=>'DELETE'])}}
-                                        {{link_to_route('studio.details','',$s->id,['class'=>'btn btn-info btn-sm fad fa-info-square'])}}
+                                        {{link_to_route('studio.show','',$s->id,['class'=>'btn btn-info btn-sm fad fa-info-square'])}}
                                         {{link_to_route('studio.edit','',$s->id,['class'=>'btn btn-warning btn-sm fad fa-edit']) }}
                                         {{Form::button('',['class'=>'btn btn-danger btn-sm fad fa-trash-alt','type'=>'submit','onclick'=>'return confirm("Are you sure you want to delete this studio?")'])}}
                                     {{Form::close()}}

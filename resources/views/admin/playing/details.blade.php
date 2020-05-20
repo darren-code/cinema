@@ -14,34 +14,36 @@
                 <h4 class="title">Allocation Studio Details</h4>
             </div>
             <div class="content table-responsive table-full-width">
+                <div class="card col-12">
                 <table class="table table-striped">
                     <tbody>
                         <tr>
                             <th style="padding-left: 5em">Allocation ID</th>
-                            <td>{{$playing[0]->id}}</td>
+                            <td align="right">{{$playing[0]->id}}</td>
                         </tr>
                         <tr>
                             <th style="padding-left: 5em">Movie Title</th>
-                            <td>
+                            <td align="right">
                                 {{link_to_route('movies.show',$playing[0]->title,$playing[0]->studio_id,[])}}
                             </td>
                         </tr>
                         <tr>
                             <th style="padding-left: 5em">Studio</th>
-                            <td>
+                            <td align="right">
                                 {{link_to_route('studio.details',$playing[0]->name,$playing[0]->studio_id,[])}}
                             </td>
                         </tr>
                         <tr>
                             <th style="padding-left: 5em">Airtime</th>
-                            <td>{{$playing[0]->time}}</td>
+                            <td align="right">{{ substr($playing[0]->time,0,5)}}</td>
                         </tr>
                         <tr>
                             <th style="padding-left: 5em">Branch Location</th>
-                            <td>{{$playing[0]->location}}</td>
+                            <td align="right">{{$playing[0]->location}}</td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>

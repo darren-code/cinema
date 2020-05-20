@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Movie;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
@@ -161,12 +164,17 @@ class MovieController extends Controller
     public function home()
     {
         return view('front.movie.home', [
-            'branches' => DB::table('branch')->orderBy('address', 'asc')->get()
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
 
-    public function home_location($branch, Request $request)
+    public function movie($branch)
     {
+        $movies = DB::table('movies as m')
+            ->join('playing_relation as p', 'm.id', '=', 'p.movie')
+            ->select('m.title', 'm.released', 'm.poster', 'm.id as mid', 'p.branch as bid')
+            ->where('m.avail', 1)->where('p.branch', $branch);
+
         $data = DB::table('playing_relation')
             ->join('movies', 'playing_relation.movie', '=', 'movies.id')
             ->join('branch', 'playing_relation.branch', '=', 'branch.id')
@@ -183,12 +191,13 @@ class MovieController extends Controller
             ->select('s.*', 'b.*', 'm.*', 't.*', 'p.*')->get();
         */
 
-        $request->session()->put('location', $branch);
+        Session::put('location', $branch);
         
         return view('front.movie.home', [
-            'nowready' => $data->where('movies.avail', 1)->take(4)->get(),
+            'nowready' => $movies->take(4)->get(),
             'upcoming' => $data->where('movies.avail', 2)->take(4)->get(),
-            'morefilm' => $data->where('movies.avail', 1)->take(8)->get()
+            'morefilm' => DB::table('movies')->orderBy('released', 'asc')->take(8)->get(),
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
 
@@ -212,46 +221,150 @@ class MovieController extends Controller
         return new Response($file, 200);
     }
 
-    public function details($id)
+    public function details($branch, $id)
     {
         $related = DB::table('playing_relation')
                     ->join('movies', 'playing_relation.movie', '=', 'movies.id')
                     ->join('studios', 'playing_relation.studio', '=', 'studios.id')
                     ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
-                    ->select('studios.*', 'showtimes.*', 'movies.*')
+                    ->join('branch', 'playing_relation.branch', '=', 'branch.id')
+                    ->select('studios.*', 'showtimes.*', 'movies.*', 'branch.*')
                     ->orderBy('time')
-                    ->where('movies.id',$id)
+                    ->where('movies.id', $id)
+                    ->where('branch.id', $branch)
                     ->get();
 
+        $genres = DB::table('genre_relation as gr')
+            ->join('movies as m', 'gr.movie', '=', 'm.id')
+            ->join('genres as g', 'gr.genre', '=', 'g.id')
+            ->select('g.genre')
+            ->where('gr.movie', $id)->get();
+
+        $movie = Movie::where('id', $id)->first();
+
+        if (Session::get('age') < $movie->parental)
+        {
+            return redirect()->back()->withErrors(Session::get('age') . ' < ' . $movie->parental);
+        }
+
         return view('front.movie.movie', [
-            'movie' => Movie::where('id', $id)->first(),
-            'shows' => $related
+            'movie' => $movie,
+            'shows' => $related,
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
+            'genres' => $genres,
         ]);
     }
 
-    public function seats($id, $time)
+    public function seats($branch, $id, $time)
     {
         $related = DB::table('playing_relation')
                     ->join('movies', 'playing_relation.movie', '=', 'movies.id')
                     ->join('studios', 'playing_relation.studio', '=', 'studios.id')
                     ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
-                    ->select('studios.*', 'showtimes.*', 'movies.*')
+                    ->join('branch', 'playing_relation.branch', '=', 'branch.id')
+                    ->select('studios.*', 'showtimes.*', 'movies.*', 'branch.*')
+                    // ->select('movies.*')
                     ->orderBy('name')
                     ->where('movies.id', $id)
                     ->where('showtimes.time', $time)
+                    ->where('branch.id', $branch)
                     ->get();
 
         return view('front.movie.seat', [
             'movie' => Movie::where('id', $id)->first(),
             'shows' => $related,
-            'time' => $time
+            'time' => $time,
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
 
+    public function browse_movies()
+    {
+        return view('front.movie.browse', [
+            'movies' => Movie::get(),
+            'genres' => DB::table('genres')->get(),
+        ]);
+    }
+
+    public function browse(Request $request)
+    {
+        $query = $request['search'];
+        $order = $request['orderBy'];
+        $rating = $request['parental'];
+        $genre = $request['category'];
+        $year = $request['year'];
+
+        switch ($order)
+        {
+            case 'id' :
+                $param1 = 'id';
+                $param2 = 'asc';
+                break;
+            case 'asc' :
+                $param1 = 'released';
+                $param2 = 'asc';
+                break;
+            case 'desc' :
+                $param1 = 'released';
+                $param2 = 'desc';
+                break;
+            case 'title' :
+                $param1 = 'title';
+                $param2 = 'asc';
+                break;
+        }
+
+        $age = 0;
+        switch ($rating)
+        {
+            case 'G' :
+                $age = 0;
+                break;
+            case 'PG' :
+                $age = 10;
+                break;
+            case 'PG-13' :
+                $age = 13;
+                break;
+            case 'R' :
+                $age = 16;
+                break;
+            case 'NC-17' :
+                $age = 18;
+                break;
+        }
+
+        if (empty($genre))
+        {
+            $result = DB::table('movies as m');
+        }
+        else
+        {
+            $result = DB::table('genre_relation as gr')
+            ->join('movies as m', 'm.id', '=', 'gr.movie')
+            ->join('genres as g', 'g.id', '=', 'gr.genre')
+            ->select('m.*')
+            ->where('g.genre', $genre);
+        }
+        $result = $result
+            ->whereYear('m.released', $year)
+            ->where('m.parental', $age)
+            ->where('m.title', 'like', '%' . $query . '%')
+            ->orderBy($param1, $param2)
+            ->get();
+
+        return view('front.movie.browse', [
+            'movies' => $result,
+            'genres' => DB::table('genres')->get(),
+        ]);
+    }
+
+    /*
     public function movie()
     {
         return view('front.movie.index', [
             'movies' => Movie::orderBy('released', 'desc')->take(20)->get()
         ]);
     }
+    */
 }

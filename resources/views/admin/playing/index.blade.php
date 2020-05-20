@@ -23,24 +23,24 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Studio ID</th>
-                            <th>Movie ID</th>
-                            <th>Showtime</th>
+                            <th>Studio</th>
+                            <th>Movie</th>
+                            <th>Airtime</th>
                             <th>Branch</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($playing as $p)
+                        @foreach($playing as $playing => $p)
                             <tr>
                                 <td>{{$p->id}}</td>
-                                <td>{{$p->studio}}</td>
-                                <td>{{$p->movie}}</td>
-                                <td>{{$p->showtime}}</td>
-                                <td>{{$p->branch}}</td>
+                                <td>{{$p->name}}</td>
+                                <td>{{$p->title}}</td>
+                                <td>{{substr($p->time,0,5) }}</td>
+                                <td>{{$p->location}}</td>
                                 <td>
                                     {{Form::open(['route'=>['playing.destroy',$p->id],'method'=>'DELETE'])}}
-                                        {{link_to_route('playing.details','',$p->id,['class'=>'btn btn-info btn-sm fad fa-info-square'])}}
+                                        {{link_to_route('playing.show','',$p->id,['class'=>'btn btn-info btn-sm fad fa-info-square'])}}
                                         {{link_to_route('playing.edit','',$p->id,['class'=>'btn btn-warning btn-sm fad fa-edit']) }}
                                         {{Form::button('',['class'=>'btn btn-danger btn-sm fad fa-trash-alt','type'=>'submit','onclick'=>'return confirm("Are you sure you want to delete this allocation?")'])}}
                                     {{Form::close()}}

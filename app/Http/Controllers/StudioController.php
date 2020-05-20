@@ -14,7 +14,7 @@ class StudioController extends Controller
         return view('admin.studio.index',compact('studio'));
     }
 
-    public function details($id)
+    public function show($id)
     {
         $title = DB::table('studios as s')
             ->where('s.id',$id)

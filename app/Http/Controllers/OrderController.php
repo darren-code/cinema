@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use App\User;
 use App\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -19,13 +19,18 @@ class OrderController extends Controller
     }
     public function show($id)
     {
-        $users = User::where('id',$id)->get();
         $order = Order::where('id',$id)->get();
         $orders = DB::table('transaction as t')
             ->join('paid_tickets as pt','t.id','=','pt.payment')
-            ->select('t.id','t.total','t.method','t.time','pt.payment')
+            // ->select('t.id','t.total','t.method','t.time','pt.payment')
+            ->select('pt.payment')
             ->where('t.id',$id)
             ->get();
-        return view('admin.orders.details',compact('order','orders','users'));
+        return view('admin.orders.details',compact('order','orders'));
+    }
+    public function approve($id)
+    {
+        // Proses approve 
+
     }
 }

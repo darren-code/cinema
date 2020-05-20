@@ -5,19 +5,19 @@
 @endsection
 
 {{-- @section('header') --}}
-
 @section('content')
 <form action="{{-- route('') --}}" accept-charset="utf-8" method="post">
     <div class="row mt-4">
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('movie.details', ['id' => $movie->id]) }}">{{ $movie->title }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('movie.details', ['id' => $movie->id, 'branch' => Session::get('location')]) }}">{{ $movie->title }}</a></li>
                     <li class="breadcrumb-item active"><a href="#">{{ date('G.i', strtotime($time)) }}</a></li>
                 </ol>
             </nav>
         </div>
     </div>
+
     <div class="row mt-3">
         <div class="col-lg-3">
             @if (Storage::disk('local')->has('poster/' . $movie->poster))
@@ -27,6 +27,7 @@
             <h4 class="text-center">{{ DateTime::createFromFormat("Y-m-d", $movie->released)->format("Y") }}</h4>
             <div class="dropdown-divider"></div>
         </div>
+
         <div class="col-lg-9">
             <div class="mb-3 list-group list-group-horizontal-md" role="tablist">
                 @foreach ($shows as $row)
@@ -118,6 +119,34 @@
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">A1</div>
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">A2</div> --}}
             </div>
+            <div class="row">
+                    <div class="col">
+                        <h5>Total</h5>
+                        <span class="total"></span>
+                    </div>
+                    <div class="col">
+                        <button data-target="#payment" data-toggle="modal" type="button" class="mb-3 btn btn-danger float-right">Proceed to Payment <i class="fad fa-credit-card"></i></button>
+                        <div class="modal fade" id="payment" role="dialog" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Finalization</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary">Check Out</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
     <div class="row pt-3">
@@ -125,34 +154,7 @@
 
         </div>
         <div class="col-lg-9">
-            <div class="row">
-                <div class="col">
-                    <h5>Total</h5>
-                    <span class="total"></span>
-                </div>
-                <div class="col">
-                    <button data-target="#payment" data-toggle="modal" type="button" class="mb-3 btn btn-danger float-right">Proceed to Payment <i class="fad fa-credit-card"></i></button>
-                    <div class="modal fade" id="payment" role="dialog" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Finalization</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary">Check Out</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Sebelumnya disini -->
         </div>
     </div>
 </form>

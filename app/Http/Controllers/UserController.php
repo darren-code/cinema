@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -80,6 +81,7 @@ class UserController extends Controller
 
         $user->save();
 
+        Session::put('age', date_diff(date_create($birthdate), date_create('now'))->y); // Age Calculation 
         Auth::login($user, false);
 
         return redirect()->route('home');
@@ -97,6 +99,7 @@ class UserController extends Controller
             'username' => $request['username'],
             'password' => $request['password']
         ], (!empty($request['remember'])) ? true : false)) {
+            Session::put('age', date_diff(date_create(Auth::user()->birthdate), date_create('now'))->y); // Age Calculation
             return redirect()->route('home');
         }
         return redirect()->back()->withErrors(['Invalid Credentials!']);
@@ -105,6 +108,7 @@ class UserController extends Controller
     public function logout()
     {
         Auth::logout();
+        Session::flush();
         return redirect()->route('login');
     }
 
@@ -114,10 +118,63 @@ class UserController extends Controller
         return new Response($file, 200);
     }
 
-    public function profile()
+    public function profile($id)
     {
+        $history = DB::table('transaction as t')
+                ->join('users as u','u.id','=','t.user')
+                ->select('t.*')
+                ->where('u.id',$id)
+                ->get();
+
+        $status = DB::table('transaction as t')
+                ->join('users as u','u.id','=','t.user')
+                ->join('paid_tickets as pt','t.id','=','pt.payment')
+                ->select('t.*','pt.payment')
+                ->where('u.id',$id)
+                ->get();
+        
+        $rating = DB::table('users as u')
+                ->join('review_relation as rr','rr.user','=','u.id')
+                ->join('reviews as r','rr.review','=','r.id')
+                ->select('r.*','rr.*')
+                ->where('u.id',$id)
+                ->get();
+
+        
         return view('front.user.profile', [
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'history' => $history,
+            'rating' => $rating,
+            'status' => $status,
         ]);
+    }
+
+    public function edit($id)
+    {
+        $user = Auth::user();
+        return view('front.user.edit ', compact('user'));
+    }
+    public function update(Request $req, $id)
+    {
+        dd($id);
+        $user = Auth::user();
+
+        $req->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'gender' => 'required',
+            'phone' => 'numeric',
+        ]);
+        
+        $user->update([
+            'firstname' => $req->firstname,
+            'lastname'=> $req->lastname,
+            'gender' => $req->gender,
+            'phone' => $req->phone,
+        ]);
+        
+        // Redirect
+        // return redirect('profile/{id}',['id'=>$id]);
+        // return redirect('')
     }
 }

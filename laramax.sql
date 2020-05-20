@@ -1,9 +1,13 @@
+CREATE DATABASE IF NOT EXISTS `laramax`;
+
+USE `laramax`;
+
 -- phpMyAdmin SQL Dump
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 18, 2020 at 04:24 PM
+-- Generation Time: May 20, 2020 at 06:36 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -67,7 +71,10 @@ CREATE TABLE `branch` (
 --
 
 INSERT INTO `branch` (`id`, `location`, `country`, `state`, `province`, `town`, `zip_code`, `address`) VALUES
-(1, 'Universe', 'Indonesia', 'Banten', 'Tangerang', 'Gading Serpong', '15315', 'Scientia Boulevard');
+(1, 'Summarecon Mall Serpong', 'Indonesia', 'Banten', 'Tangerang', 'Gading Serpong', '15315', 'Scientia Boulevard'),
+(2, 'AEON Mall', 'Indonesia', 'Banten', 'Tangerang', 'Gading Serpong', '15332', 'BSD Area'),
+(3, 'Elite 51 Mall', 'United States', 'California', 'Palo Alto', 'Georgepool', '90182', 'The Nested River Street'),
+(4, 'Family\'s Mart', 'United States', 'California', 'San Jose', 'San Fransisco', '87661', 'Rivera St. 09 Avenue');
 
 -- --------------------------------------------------------
 
@@ -185,9 +192,9 @@ INSERT INTO `movies` (`id`, `title`, `director`, `avail`, `released`, `parental`
 (9, 'The Corona Virus Lock Down', 'COVID-19', 1, '1984-05-19', '10', 'Mainland China', '1589382529.png', 'https://www.youtube.com/embed/TcMBFSGVi1c'),
 (10, 'The Web', 'Jake Brown', 2, '2028-05-26', '18', 'The Premiere Prime Minister', 'JhonnyEnglish.jpg', 'https://www.youtube.com/embed/TcMBFSGVi1c'),
 (12, 'Indonesia Merdeka', 's', 2, '2020-05-15', '13', 'hey', '1589370305.png', 'https://www.youtube.com/embed/tgbNymZ7vqY'),
-(13, 'Assassins Creed', 'Justin Kurzel', 3, '0000-00-00', '13', 'Callum Lynch explores the memories of his ancestor Aguilar de Nerha and gains the skills of a Master Assassin, before taking on the secret Templar society.', 'Assassinscreed.jpg', 'https://youtu.be/gfJVoF5ko1Y'),
+(13, 'Assassins Creed', 'Justin Kurzel', 2, '2077-12-12', '13', 'Callum Lynch explores the memories of his ancestor Aguilar de Nerha and gains the skills of a Master Assassin, before taking on the secret Templar society.', 'Assassinscreed.jpg', 'https://youtu.be/gfJVoF5ko1Y'),
 (14, 'Rambo', 'Sylvester Stallone', 3, '0000-00-00', '18', 'In Thailand, John Rambo joins a group of mercenaries to venture into war-torn Burma, and rescue a group of Christian aid workers who were kidnapped by the ruthless local infantry unit.', 'Rambo.jpg', 'https://youtu.be/2CRjdwRYQbU'),
-(15, 'Silenthill', 'Christophe Gans', 3, '0000-00-00', '18', 'A woman, Rose, goes in search for her adopted daughter within the confines of a strange, desolate town called Silent Hill.', 'Silenthill.jpg', 'https://youtu.be/WWMGZe6iucw'),
+(15, 'Silenthill', 'Christophe Gans', 1, '2020-11-11', '18', 'A woman, Rose, goes in search for her adopted daughter within the confines of a strange, desolate town called Silent Hill.', 'Silenthill.jpg', 'https://youtu.be/WWMGZe6iucw'),
 (16, 'Spiderman 1', 'Sam Raimi', 2, '0000-00-00', '13', 'When bitten by a genetically modified spider, a nerdy, shy, and awkward high school student gains spider-like abilities that he eventually must use to fight evil as a superhero after tragedy befalls his family.', 'Spiderman1.jpg', 'https://youtu.be/O7zvehDxttM'),
 (17, 'Sipderman 2', 'Sam Raimi', 2, '0000-00-00', '13', 'Peter Parker is beset with troubles in his failing personal life as he battles a brilliant scientist named Doctor Otto Octavius.', 'Spiderman2.jpg', 'https://youtu.be/BWsLc3j1AWg'),
 (18, 'Spiderman 3', 'Sam Raimi', 3, '0000-00-00', '13', 'A strange black entity from another world bonds with Peter Parker and causes inner turmoil as he contends with new villains, temptations, and revenge.', 'Spiderman3.jpg', 'https://youtu.be/MTIP-Ih_GR0'),
@@ -219,6 +226,7 @@ CREATE TABLE `paid_tickets` (
 --
 
 INSERT INTO `paid_tickets` (`id`, `ticket`, `payment`) VALUES
+(1, 2, 2),
 (2, 2, 1);
 
 -- --------------------------------------------------------
@@ -245,8 +253,14 @@ INSERT INTO `playing_relation` (`id`, `studio`, `movie`, `showtime`, `branch`) V
 (5, 2, 28, 4, 1),
 (6, 2, 28, 1, 1),
 (7, 2, 28, 2, 1),
-(8, 3, 28, 3, 1),
-(9, 1, 28, 3, 1);
+(8, 3, 2, 3, 2),
+(9, 1, 28, 3, 1),
+(10, 2, 21, 2, 1),
+(12, 2, 15, 2, 1),
+(13, 2, 15, 2, 1),
+(14, 2, 15, 2, 1),
+(15, 2, 15, 2, 1),
+(18, 1, 19, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -291,6 +305,21 @@ INSERT INTO `review_relation` (`id`, `user`, `movie`, `review`, `rating`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payload` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `showtimes`
 --
 
@@ -307,7 +336,8 @@ INSERT INTO `showtimes` (`id`, `time`) VALUES
 (1, '10:40:00'),
 (2, '12:30:00'),
 (3, '16:30:00'),
-(4, '15:20:00');
+(4, '15:20:00'),
+(5, '18:30:00');
 
 -- --------------------------------------------------------
 
@@ -373,7 +403,9 @@ CREATE TABLE `transaction` (
 
 INSERT INTO `transaction` (`id`, `total`, `method`, `time`, `user`) VALUES
 (1, 40000, 'Gopay', '2020-05-13 13:28:14', 1),
-(2, 40000, 'OVO', '2020-05-13 13:34:30', 2);
+(2, 40000, 'OVO', '2020-05-13 13:34:30', 2),
+(3, 40000, 'OVO', '2020-05-20 14:58:30', 3),
+(4, 40000, 'Gopay', '2020-05-20 15:37:56', 2);
 
 -- --------------------------------------------------------
 
@@ -403,12 +435,15 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `gender`, `phone`, `username`, `password`, `email`, `birthdate`, `photo`, `bio`, `created`, `updated`, `remember_token`) VALUES
-(1, 'Darren', 'Grunt', 'Male', '08123456789', 'darren', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'darren@mail.com', '1912-12-12', 'default.png', NULL, '2020-05-11 17:34:18', '2020-05-18 19:10:04', '3SsQZP6baAWlXCCBaMt0oJt2sFFtUPYnzy9qMx9Sk5UyPG1e2EISIhwpDxy3'),
-(2, 'Default', 'Default\r\n', 'Male', '08123456789', 'zerowu49', '$2y$10$NAMohNFouQwxs.tASrT4.u2X1svPd6S5LBxghbJlPTbFNvG23YH6u', 'admin@umn.ac.id', '2010-02-16', 'default.png', NULL, '2020-05-12 15:17:53', '2020-05-18 19:10:04', ''),
+(1, 'Darren', 'Grunt', 'Male', '08123456789', 'darren', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'darren@mail.com', '1990-12-12', 'default.png', NULL, '2020-05-11 17:34:18', '2020-05-20 22:39:34', 'iXq5dqLfuC9tCerdH1RmWt1zcaGVYsoohzCqefQ0pY2ZyCIelWhFZEQNe0Gf'),
+(2, 'Default', 'Default\r\n', 'Male', '08123456789', 'zerowu49', '$2y$10$NAMohNFouQwxs.tASrT4.u2X1svPd6S5LBxghbJlPTbFNvG23YH6u', 'admin@umn.ac.id', '2000-02-16', 'default.png', NULL, '2020-05-12 15:17:53', '2020-05-20 22:55:52', ''),
 (3, 'John', 'Doe', 'Male', '08123456789', 'johndoe', '$2y$10$yFwRNKGCA9zQlJNUpDmUJ.r5MLmNiS99wnx3H82LdY8h01z3/yYXC', 'johndoe@mail.com', '2000-02-18', 'default.png', NULL, '2020-05-14 02:13:45', '2020-05-18 19:10:04', NULL),
+(3213567, 'Royson', 'Roy', 'Male', '083478527348', 'ventrix', '$2y$10$QEWo5KXwJViF90rHryWUA.qbTgx./keaCC78/VJYCaEWEb.Oid9dS', 'royson@student.umn.ac.id', '2000-06-20', 'default.png', NULL, '2020-05-20 16:33:50', '2020-05-20 23:33:50', NULL),
+(22538349, 'Flestnia', 'Nirvash', 'Male', '081234567892', 'testtest1', '$2y$10$K4dE4.ti1JDCceXjG4EfH.JopxmG1SW.oJRXLKJzTv9t6Tn9RkClG', 'FN@mail', '0001-11-11', 'default.png', NULL, '2020-05-20 13:33:54', '2020-05-20 20:33:54', NULL),
 (47850843, 'Laramax', 'Clinton', 'Female', '08123456789', 'laramax', '$2y$10$Wbp29X8PfPMV8cCdGrEjNu6nPsBOWDpXKdvZ52xLg6Jurox6fjt3G', 'laramax@umn.ac.id', '2000-05-14', 'default.png', NULL, '2020-05-14 02:55:10', '2020-05-18 19:10:04', NULL),
 (63154194, 'Chendra', 'Dewangga', 'Male', '08123456789', 'Nirvash', '$2y$10$GoqH2w37FdZH2He/YjfdVubg4sxd/aPd3vO/M4zSYxp1FAgzOnNvO', 'chendra.dewangga@gmail.com', '2000-09-12', 'default.png', NULL, '2020-05-18 12:31:39', '2020-05-18 19:31:39', NULL),
 (66914536, 'Avenger', 'Simpson', 'Female', '08123456789', 'mantis', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'avengers@mail.com', '1999-07-10', 'default.png', NULL, '2020-05-14 07:57:14', '2020-05-18 19:10:04', NULL),
+(71735304, 'Nirvash', 'Nirvash', 'Male', '081234567891', 'Nirvash7777', '$2y$10$XomqMVkXLM1r7le4b/a3l.JRB4unCSh/Tl/st1OffCaNoGphe.4tq', 'Nirvash1@mail', '2000-11-11', 'default.png', NULL, '2020-05-20 13:08:16', '2020-05-20 20:08:16', NULL),
 (98433622, 'Nirvash', 'Nirvash', 'Male', '081234567890', 'Nirvash777', '$2y$10$J42FI70/AjuDmjzC11HAXOrTw3TdER1ndTLT8qNnSXdGdJry8VJ5W', 'Nirvash@mail', '2000-12-12', 'default.png', NULL, '2020-05-18 12:34:45', '2020-05-18 19:34:45', NULL);
 
 --
@@ -489,6 +524,12 @@ ALTER TABLE `review_relation`
   ADD KEY `user` (`user`);
 
 --
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD UNIQUE KEY `sessions_id_unique` (`id`);
+
+--
 -- Indexes for table `showtimes`
 --
 ALTER TABLE `showtimes`
@@ -528,7 +569,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `branch`
 --
 ALTER TABLE `branch`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47850844;
 
 --
 -- AUTO_INCREMENT for table `casts`
@@ -564,13 +605,13 @@ ALTER TABLE `movies`
 -- AUTO_INCREMENT for table `paid_tickets`
 --
 ALTER TABLE `paid_tickets`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `playing_relation`
 --
 ALTER TABLE `playing_relation`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -588,13 +629,13 @@ ALTER TABLE `review_relation`
 -- AUTO_INCREMENT for table `showtimes`
 --
 ALTER TABLE `showtimes`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `studios`
 --
 ALTER TABLE `studios`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tickets`
@@ -606,7 +647,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
