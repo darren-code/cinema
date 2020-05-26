@@ -17,7 +17,7 @@
                 <h4 class="title">Airtime Details</h4>
                 <p class="category">Airtime: {{$data->time}} </p>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <table class="table table-striped">
                     @if(isset($showtime[0]))
                     <thead>

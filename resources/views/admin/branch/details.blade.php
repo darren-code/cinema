@@ -16,7 +16,7 @@
             <div class="header">
                 <h4 class="title">Branch Information</h4>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <table class="table table-striped">
                     <tbody>
                         <tr>
@@ -68,7 +68,7 @@
             <div class="header">
                 <h4 class="title">Studio(s) in Branch </h4>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive ">
                 <table class="table table-striped">
                     @if(isset($branch[0]))
                     <thead>

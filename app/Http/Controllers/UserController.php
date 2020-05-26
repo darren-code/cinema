@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -128,23 +129,21 @@ class UserController extends Controller
 
         $status = DB::table('transaction as t')
                 ->join('users as u','u.id','=','t.user')
-                ->join('paid_tickets as pt','t.id','=','pt.payment')
-                ->select('t.*','pt.payment')
-                ->where('u.id',$id)
-                ->get();
-        
-        $rating = DB::table('users as u')
-                ->join('review_relation as rr','rr.user','=','u.id')
-                ->join('reviews as r','rr.review','=','r.id')
-                ->select('r.*','rr.*')
+                ->select('t.*')
                 ->where('u.id',$id)
                 ->get();
 
+        $rating = DB::table('users as u')
+        ->join('reviews as r','r.user','=','u.id')
+        ->join('movies as m', 'r.movie', '=', 'm.id')
+        ->select('r.*', 'm.title', 'm.id as mid')
+        ->where('u.id',$id);
         
         return view('front.user.profile', [
             'user' => Auth::user(),
             'history' => $history,
-            'rating' => $rating,
+            'rating' => $rating->get(),
+            'total' => $rating->avg('rating'),
             'status' => $status,
         ]);
     }
@@ -154,25 +153,77 @@ class UserController extends Controller
         $user = Auth::user();
         return view('front.user.edit ', compact('user'));
     }
-    public function update(Request $req, $id)
-    {
-        dd($id);
-        $user = Auth::user();
 
+    public function update(Request $req)
+    {
+
+        // dd($id);
+        // $user = Auth::user();
+
+        /*
         $req->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'firstname' => 'required|max:120',
+            'lastname' => 'required|max:120',
+            'username' => 'required|min:6|unique:users|max:30',
+            'email' => 'required|email|unique:users|max:120',
+            'birthdate' => 'required|date|before:-3 years',
+            'phone' => 'required|regex:/(08)[0-9]{9}/',
             'gender' => 'required',
-            'phone' => 'numeric',
+            'bio' => 'nullable|max:500'
         ]);
+        */
+        // dd($req['lastname']);
+
+        $req->validate( [
+            'firstname' => 'required|max:120',
+            'lastname' => 'required|max:120',
+            'username' => 'required|min:6|unique:users|max:30',
+            'email' => 'required|email|unique:users|max:120',
+            'birthdate' => 'required|date|before:-3 years',
+            'phone' => 'required|regex:/(08)[0-9]{9}/',
+            'gender' => 'required',
+            'bio' => 'nullable|max:500'
+        ]);
+
+        $user = Auth::user(); 
+        dd($user);
+
+        $file = $req->file('photo');
+
+        if ($file)
+        {
+            Storage::disk('local')->put('profile/' . $file, File::get($file));
+            $photo = $user->id . '.' . $file->extension();
+        }
+
+
+        $user->firstname = $req['firstname'];
+        $user->lastname = $req['lastname'];
+        $user->username = $req['username'];
+        $user->email = $req['email'];
+        $user->birthdate = $req['birthdate'];
+        $user->gender = $req['gender'];
+        $user->phone = $req['phone'];
+        $user->bio = $req['bio'];
+        $user->photo = $photo;
+
+        $user->update();
         
+        /*
         $user->update([
             'firstname' => $req->firstname,
             'lastname'=> $req->lastname,
+            'username' => $req->username,
+            'email' => $req->email,
+            'birthdate' => $req->birthdate,
             'gender' => $req->gender,
             'phone' => $req->phone,
+            'bio' => $req->bio,
+            'photo' => $photo,
         ]);
+        */
         
+        return redirect()->route('profile', ['id' => $user->id]);
         // Redirect
         // return redirect('profile/{id}',['id'=>$id]);
         // return redirect('')

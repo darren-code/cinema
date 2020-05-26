@@ -33,7 +33,9 @@
                 @foreach ($shows as $row)
                     <a class="list-group-item list-group-item-action" id="studio-{{ $row->name }}-tab" data-toggle="pill" href="#studio-{{ $row->name }}" role="tab">
                         Studio {{ $row->name }}
-                        <span class="badge badge-primary badge-pill float-right">16</span>
+                        <span class="badge badge-primary badge-pill float-right">
+                            {{-- Total Available Seat --}}
+                        </span>
                     </a>
                 @endforeach
                 {{-- <li class="nav-item">
@@ -85,7 +87,7 @@
                                 <div class="row mx-md-auto">
                                     @for ($i = 0; $i < $center; $i++)
                                         <div class="col-2 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}"
+                                        <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}"
                                             data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm"/>
                                         </div>
                                     @endfor
@@ -120,33 +122,34 @@
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">A2</div> --}}
             </div>
             <div class="row">
-                    <div class="col">
-                        <h5>Total</h5>
-                        <span class="total"></span>
-                    </div>
-                    <div class="col">
-                        <button data-target="#payment" data-toggle="modal" type="button" class="mb-3 btn btn-danger float-right">Proceed to Payment <i class="fad fa-credit-card"></i></button>
-                        <div class="modal fade" id="payment" role="dialog" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Finalization</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary">Check Out</button>
-                                    </div>
+                <div class="col">
+                    <h5>Total</h5>
+                    <span class="total"></span>
+                </div>
+                <div class="col">
+                    <button data-target="#payment" data-toggle="modal" type="button" class="mb-3 btn btn-danger float-right">Proceed to Payment <i class="fad fa-credit-card"></i></button>
+                    <div class="modal fade" id="payment" role="dialog" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Finalization</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{-- Some Data --}}
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary">Check Out</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
     <div class="row pt-3">
@@ -173,6 +176,8 @@
             let std = $('input.seat.classic:checked').length * 50000; // Standard Price
             $('span.total').html(formatter.format(lux + std))
         });
+
+        $('table').DataTable();
     });
 </script>
 @endsection

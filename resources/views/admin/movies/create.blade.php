@@ -16,14 +16,11 @@
                 {!!Form::open(['url'=>'/admin/movies','files'=>'true'])!!} 
                     <div class="row">
                         <div class="col-md-12">
-
                             @include('admin.movies._field')
                             <div class="form-group">
-                                {{ Form::submit('Add Movie',['class'=>'btn btn-info btn-fill btn-wd'])}}
+                            {{ Form::submit('Add Movie',['class'=>'btn btn-info btn-fill btn-wd'])}}
                             </div>
-
                         </div>
-
                     </div>
                     <div class="clearfix">
 

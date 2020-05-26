@@ -17,7 +17,7 @@
                 <h4 class="title">Movie Details</h4>
                 <p class="category">List of stock</p>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <table class="table table-striped">
                     <tbody>
                         <tr>
@@ -30,6 +30,25 @@
                             <td>{{$movies->title}}</td>
                         </tr>
 
+                        <tr>
+                            <th>Genre</th>
+                            <td>
+                                @if(isset($genre[0]))
+                                @php
+                                    $panjang = count($genre);
+                                @endphp
+                                @foreach($genre as $genres=>$g)
+                                    {{$g->genre}}
+                                    @if($genres!==($panjang-1))
+                                        , 
+                                    @endif
+                                @endforeach
+                                @else
+                                    No genre yet... <pre></pre>
+                                    {{ link_to_route('genrerelation.create', "Add Genre Relation", '', ['class' => 'btn btn-info']) }}
+                                @endif
+                            </td>
+                        </tr>
                         <tr>
                             <th>Director</th>
                             <td>{{$movies->director}}</td>
@@ -88,11 +107,6 @@
                                 </iframe>
                             </td>
                         </tr>
-
-                        <!-- created at dan updated at menunggu perubahan db -->
-
-
-
                     </tbody>
 
                 </table>

@@ -33,7 +33,7 @@
                             Hello, {{ Auth::user()->username }}
                         </a>
                         <div class='dropdown-menu' aria-labelledby='more'>
-                            <a href="{{ url('profile',Auth::user()->id) }}" class="dropdown-item">Profile</a>
+                            <a href="{{ url('profile', Auth::user()->id) }}" class="dropdown-item">Profile</a>
                             <a href="{{ route('signout') }}" class="dropdown-item">Sign Out</a>
                         </div>
                     </li>

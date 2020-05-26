@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Genre;
 use App\Movie;
 use DateTime;
 use Illuminate\Http\Request;
@@ -57,6 +58,7 @@ class MovieController extends Controller
             'synopsis'=>'required',
             'poster'=>'image|required',
             'trailer' => 'required',
+            // new genre
         ]);
 
         // Upload image
@@ -100,19 +102,6 @@ class MovieController extends Controller
             'trailer' => 'required',
         ]);
 
-        // Check if there is any image
-        // if($req->hasFile('image')){
-        //     //Check if the old image exists inside folder
-        //     if(file_exists(public_path('uploads/').$movies->image)){
-        //         unlink(public_path('uploads/').$movies->image);
-        //     }
-        //     // Upload the new image
-        //     $image = $req->image;
-        //     $image->move('poster',$image->getClientOriginalName());
-
-        //     $movies->image = $req->image->getClientOriginalName();
-        // }
-
         // If new image is in upload
         if($req->poster != ''){
             // Remove old image exists inside folder
@@ -154,7 +143,13 @@ class MovieController extends Controller
     public function show($id)
     {
         $movies = Movie::find($id);
-        return view('admin.movies.details',compact('movies'));
+        $genre = DB::table('movies as m')
+            ->join('genre_relation as gr','gr.movie','=','m.id')
+            ->join('genres as g','gr.genre','=','g.id')
+            ->where('m.id',$id)
+            ->select('g.genre')
+            ->get();
+        return view('admin.movies.details',compact('movies','genre'));
     }
 
     /*
@@ -281,7 +276,7 @@ class MovieController extends Controller
     public function browse_movies()
     {
         return view('front.movie.browse', [
-            'movies' => Movie::get(),
+            'movies' => Movie::paginate(16),
             'genres' => DB::table('genres')->get(),
         ]);
     }
@@ -293,6 +288,14 @@ class MovieController extends Controller
         $rating = $request['parental'];
         $genre = $request['category'];
         $year = $request['year'];
+
+        /*
+        Session::put('query', $query);
+        Session::put('order', $order);
+        Session::put('parental', $rating);
+        Session::put('category', $genre);
+        Session::put('year', $year);
+        */
 
         switch ($order)
         {
@@ -334,28 +337,42 @@ class MovieController extends Controller
                 break;
         }
 
-        if (empty($genre))
-        {
-            $result = DB::table('movies as m');
-        }
-        else
+        if ($genre != 'default') // Dikarenekan belum seluruh film memiliki genre sehingga
         {
             $result = DB::table('genre_relation as gr')
             ->join('movies as m', 'm.id', '=', 'gr.movie')
             ->join('genres as g', 'g.id', '=', 'gr.genre')
             ->select('m.*')
+            ->where('m.title', 'like', '%' . $query . '%')
             ->where('g.genre', $genre);
         }
-        $result = $result
-            ->whereYear('m.released', $year)
-            ->where('m.parental', $age)
-            ->where('m.title', 'like', '%' . $query . '%')
-            ->orderBy($param1, $param2)
-            ->get();
+        else
+        {
+            $result = DB::table('movies as m')->where('m.title', 'like', '%' . $query . '%');
+        }
+
+        if ($rating != 'default')
+        {
+            $result = $result->where('m.parental', '=', $age);
+        }
+
+        if ($year != 'default')
+        {
+            $result = $result->whereYear('m.released', '=', $year);
+        }
+
+        if ($order != 'default')
+        {
+            if (isset($param1) && isset($param2))
+            {
+                $result = $result->orderBy($param1, $param2);
+            }
+        }
 
         return view('front.movie.browse', [
-            'movies' => $result,
+            'movies' => $result->paginate(16),
             'genres' => DB::table('genres')->get(),
+            'data' => $request->all(),
         ]);
     }
 

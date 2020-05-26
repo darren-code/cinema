@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Arr;
@@ -50,9 +51,18 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Exception $e)
     {
-        return parent::render($request, $exception);
+        if ($this->isHttpException($e))
+        {
+            $code = $e->getCode();
+            if ($code == '404')
+            {
+                return response()->view('front.404');
+            }
+        }
+
+        return parent::render($request, $e);
     }
 
     public function unauthenticated($request, AuthenticationException $exception)

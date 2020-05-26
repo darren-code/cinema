@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('page')
-    Add Studio Allocation
+    Edit Genre
 @endsection
 
 @section('content')
@@ -10,25 +10,24 @@
         @include('admin.layouts.message')
         <div class="row">
             <div class="col mb-3">
-                <a href="{{ url('admin/playing') }}" class="btn btn-primary float-left">Back to Allocation</a>
+                <a href="{{ url('admin/genre') }}" class="btn btn-primary float-left">Back to Genre</a>
             </div>
         </div>
         <div class="card">
             <div class="header">
-                <h4 class="title">Add Studio Allocation</h4>
+                <h4 class="title">Edit Genre</h4>
             </div>
             <div class="content">
-                {!!Form::open(['url'=>'/admin/playing'])!!} 
+                {{ Form::open(['url'=>[ 'admin/genre',$data->id], 'method' => 'put']) }} 
                     <div class="row">
                         <div class="col-md-12">
-                            @include('admin.playing.field')
+                            @include('admin.genre.field')
                             <div class="form-group">
-                                {{ Form::submit('Add Studio Allocation',['class'=>'btn btn-info btn-fill btn-wd'])}}
+                                {{ Form::submit('Update Genre',['class'=>'btn btn-info btn-fill btn-wd'])}}
                             </div>
                         </div>
                     </div>
                     <div class="clearfix">
-
                     </div> 
                 {!! Form::close() !!}
             </div>

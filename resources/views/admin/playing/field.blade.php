@@ -80,7 +80,3 @@
     </select>
     <span class="text-danger">{{$errors->has('branch') ? $errors->first('branch') : ''}} </span>
 </div>
-
-<div class="form-group">
-    {{ Form::submit('Edit Studio Allocation',['class'=>'btn btn-info btn-fill btn-wd'])}}
-</div>

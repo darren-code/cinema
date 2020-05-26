@@ -28,7 +28,11 @@
                 <div class=card>
                     <div class="col-lg-9">
                         <h1 class="pb-3">{{ $movie->title }}</h1>
-
+                        <div class="col-md-3 ">
+                            <iframe width="500" height="400" 
+                                src="{{ $movie->trailer }}">
+                            </iframe>
+                        </div>
                         <h4>Year:</h4>
                         <h4 class="">{{ DateTime::createFromFormat("Y-m-d", $movie->released)->format("Y") }}</h4>
                         </br>
@@ -75,12 +79,6 @@
                     </p>
                 </div>
             </div>
-        
-        <div class="row mt-3">
-            <iframe width="300" height="200" 
-                src="{{ $movie->trailer }}">
-            </iframe>
-        </div>
     </div>
     
 @endsection

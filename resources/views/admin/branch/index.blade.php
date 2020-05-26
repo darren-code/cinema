@@ -18,7 +18,7 @@
                 <h4 class="title">All Branch</h4>
                 <p class="category">List of all Branch</p>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>

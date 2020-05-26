@@ -10,6 +10,11 @@ Movies
         @include('admin.layouts.message')
         <div class="row">
             <div class="col mb-3">
+                {{ link_to_route('genre.index', "Genre", '', ['class' => 'btn btn-info ']) }}
+                &nbsp;
+                {{ link_to_route('genrerelation.index', "Genre Relation", '', ['class' => 'btn btn-info ']) }}
+                &nbsp;
+
                 {{ link_to_route('movies.create', "Add Movie", '', ['class' => 'btn btn-info float-right']) }}
             </div>
         </div>

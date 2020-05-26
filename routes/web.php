@@ -29,7 +29,7 @@ Route::group(['middleware' => ['web']], function () {
         ]);
         */
 
-        Route::post('/search', [
+        Route::get('/search', [
             'uses' => 'MovieController@browse',
             'as' => 'search',
         ]);
@@ -61,12 +61,17 @@ Route::group(['middleware' => ['web']], function () {
 
         // Route::post('profile/update','UserController@update');
 
+        Route::post('/updateprofile', [
+            'uses' => 'UserController@update',
+            'as' => 'profile.update'
+        ]);
+
         Route::get('/profile/{id}', [
             'uses' => 'UserController@profile',
             'as' => 'profile'
         ]);
     
-        Route::get('/profile/{filename}', [
+        Route::get('/account/{filename}', [
             'uses' => 'UserController@profile_picture',
             'as' => 'user.profile'
         ]);
@@ -141,6 +146,12 @@ Route::group(['middleware' => ['web']], function () {
             // Movie
             Route::resource('/movies','MovieController');
             
+            // Genre Relation 
+            Route::resource('/genrerelation','GenreRelationController');
+
+            // Genre 
+            Route::resource('/genre','GenreController');
+
             // Orders
             Route::resource('/order','OrderController');
             Route::get('/order/confirm/{id}','OrderController@approve')->name('order.approve');

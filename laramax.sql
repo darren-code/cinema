@@ -1,13 +1,9 @@
-CREATE DATABASE IF NOT EXISTS `laramax`;
-
-USE `laramax`;
-
 -- phpMyAdmin SQL Dump
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2020 at 06:36 PM
+-- Generation Time: May 26, 2020 at 04:30 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -279,7 +275,8 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`id`, `header`, `content`) VALUES
-(1, 'The movie was slick', 'It\'s just Great! Must Watch!');
+(1, 'The movie was slick', 'It\'s just Great! Must Watch!'),
+(2, 'A Must Watch', 'The movie was just great!');
 
 -- --------------------------------------------------------
 
@@ -300,7 +297,8 @@ CREATE TABLE `review_relation` (
 --
 
 INSERT INTO `review_relation` (`id`, `user`, `movie`, `review`, `rating`) VALUES
-(1, 1, 28, 1, 10);
+(1, 1, 28, 1, 10),
+(2, 1, 3, 2, 8);
 
 -- --------------------------------------------------------
 
@@ -435,10 +433,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `gender`, `phone`, `username`, `password`, `email`, `birthdate`, `photo`, `bio`, `created`, `updated`, `remember_token`) VALUES
-(1, 'Darren', 'Grunt', 'Male', '08123456789', 'darren', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'darren@mail.com', '1990-12-12', 'default.png', NULL, '2020-05-11 17:34:18', '2020-05-20 22:39:34', 'iXq5dqLfuC9tCerdH1RmWt1zcaGVYsoohzCqefQ0pY2ZyCIelWhFZEQNe0Gf'),
+(1, 'Darren', 'Grunt', 'Male', '08123456789', 'darren', '$2y$10$KcQjGGCADxFfH74uAthd2eRTLZCte2ov4eQVZ7LbMXeBVb2mhZQ8e', 'darren@mail.com', '1990-12-12', 'default.png', NULL, '2020-05-11 17:34:18', '2020-05-26 08:05:21', 'jVhKA9AbhUeY2KSNNj3d7EruWPu5e5CMQDFUeq5osakzXjvt1r9JGTqfTg2x'),
 (2, 'Default', 'Default\r\n', 'Male', '08123456789', 'zerowu49', '$2y$10$NAMohNFouQwxs.tASrT4.u2X1svPd6S5LBxghbJlPTbFNvG23YH6u', 'admin@umn.ac.id', '2000-02-16', 'default.png', NULL, '2020-05-12 15:17:53', '2020-05-20 22:55:52', ''),
 (3, 'John', 'Doe', 'Male', '08123456789', 'johndoe', '$2y$10$yFwRNKGCA9zQlJNUpDmUJ.r5MLmNiS99wnx3H82LdY8h01z3/yYXC', 'johndoe@mail.com', '2000-02-18', 'default.png', NULL, '2020-05-14 02:13:45', '2020-05-18 19:10:04', NULL),
 (3213567, 'Royson', 'Roy', 'Male', '083478527348', 'ventrix', '$2y$10$QEWo5KXwJViF90rHryWUA.qbTgx./keaCC78/VJYCaEWEb.Oid9dS', 'royson@student.umn.ac.id', '2000-06-20', 'default.png', NULL, '2020-05-20 16:33:50', '2020-05-20 23:33:50', NULL),
+(17733658, 'Roy', 'Test', 'Male', '08237549847', 'edward', '$2y$10$jKHvtYt0pyq4ef7ab9brnubkkkTztU7usbD3Co4Et3d.HMzVZ0FYC', 'roytest@gmail.com', '2000-03-25', 'default.png', NULL, '2020-05-20 17:26:50', '2020-05-21 00:26:50', NULL),
+(21957803, 'Roy', 'Test', 'Male', '08237549847', 'newgate', '$2y$10$AhsRBZAOf2.4d/06bWcxnOc/mfYlfGAzo2fcSyuKUSA5.WO0kHVkq', 'roytest2@gmail.com', '2000-03-25', 'default.png', NULL, '2020-05-20 17:28:25', '2020-05-21 00:28:25', NULL),
 (22538349, 'Flestnia', 'Nirvash', 'Male', '081234567892', 'testtest1', '$2y$10$K4dE4.ti1JDCceXjG4EfH.JopxmG1SW.oJRXLKJzTv9t6Tn9RkClG', 'FN@mail', '0001-11-11', 'default.png', NULL, '2020-05-20 13:33:54', '2020-05-20 20:33:54', NULL),
 (47850843, 'Laramax', 'Clinton', 'Female', '08123456789', 'laramax', '$2y$10$Wbp29X8PfPMV8cCdGrEjNu6nPsBOWDpXKdvZ52xLg6Jurox6fjt3G', 'laramax@umn.ac.id', '2000-05-14', 'default.png', NULL, '2020-05-14 02:55:10', '2020-05-18 19:10:04', NULL),
 (63154194, 'Chendra', 'Dewangga', 'Male', '08123456789', 'Nirvash', '$2y$10$GoqH2w37FdZH2He/YjfdVubg4sxd/aPd3vO/M4zSYxp1FAgzOnNvO', 'chendra.dewangga@gmail.com', '2000-09-12', 'default.png', NULL, '2020-05-18 12:31:39', '2020-05-18 19:31:39', NULL),
@@ -617,13 +617,13 @@ ALTER TABLE `playing_relation`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `review_relation`
 --
 ALTER TABLE `review_relation`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `showtimes`

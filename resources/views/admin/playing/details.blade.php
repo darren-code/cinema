@@ -13,7 +13,7 @@
             <div class="header">
                 <h4 class="title">Allocation Studio Details</h4>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <div class="card col-12">
                 <table class="table table-striped">
                     <tbody>
@@ -30,7 +30,7 @@
                         <tr>
                             <th style="padding-left: 5em">Studio</th>
                             <td align="right">
-                                {{link_to_route('studio.details',$playing[0]->name,$playing[0]->studio_id,[])}}
+                                {{link_to_route('studio.show',$playing[0]->name,$playing[0]->studio_id,[])}}
                             </td>
                         </tr>
                         <tr>
