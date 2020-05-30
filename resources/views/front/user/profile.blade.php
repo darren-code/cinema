@@ -6,6 +6,7 @@
 
 @section('header')
 @section('content')
+@include('includes.alert')
 <form action="{{ route('profile.update') }}" accept-charset="utf-8" enctype="multipart/form-data" method="post">
     @csrf
     <div class="emp-profile">
@@ -103,7 +104,7 @@
                                     <input type="text" name="lastname" id="lastname" class="form-control toggleable d-none" value="{{ $user->lastname }}">
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-6">
                                     <label>Username</label>
                                 </div>
@@ -111,8 +112,8 @@
                                     <p class="toggleable">{{ $user->username }}</p>
                                     <input type="text" name="username" id="username" class="form-control toggleable d-none" value="{{ $user->username }}">
                                 </div>
-                            </div>
-                            <div class="row">
+                            </div> --}}
+                            {{-- <div class="row">
                                 <div class="col-md-6">
                                     <label>Email</label>
                                 </div>
@@ -120,7 +121,7 @@
                                     <p class="toggleable">{{ $user->email }}</p>
                                     <input type="email" name="email" id="email" class="form-control toggleable d-none" value="{{ $user->email }}">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Birth Date</label>
@@ -229,7 +230,7 @@
                     <button type="button" class="toggle-edit toggleable btn btn-info btn-sm"><i class="fad fa-edit"></i></button>
                     <button type="button" class="toggle-edit toggleable btn btn-danger btn-sm d-none"><i class="fad fa-times"></i></button>
                     <button type="submit" class="toggle-edit toggleable btn btn-info btn-sm d-none"><i class="fad fa-edit"></i></button>
-                    <input type="hidden" value="{{ Session::token() }}" name="_token">
+                    {{-- <input type="hidden" value="{{ Session::token() }}" name="_token"> --}}
                 </div>
             </div>
         </div>
@@ -252,20 +253,20 @@
             ignoreReadonly: true,
         });
 
-        readURL = input => {
-            if (input.files && input.files[0])
-            {
-                let reader = new FileReader();
-                reader.onload = e => {
-                    $('#filepreview').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+        // readURL = input => {
+        //     if (input.files && input.files[0])
+        //     {
+        //         let reader = new FileReader();
+        //         reader.onload = e => {
+        //             $('#filepreview').attr('src', e.target.result);
+        //         }
+        //         reader.readAsDataURL(input.files[0]);
+        //     }
+        // }
 
-        $('#fileupload').change(() => {
-            readURL(this);
-        });
+        // $('#fileupload').change(() => {
+        //     readURL(this);
+        // });
     });
 </script>
 @endsection

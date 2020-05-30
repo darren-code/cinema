@@ -6,7 +6,8 @@
 
 {{-- @section('header') --}}
 @section('content')
-<form action="{{-- route('') --}}" accept-charset="utf-8" method="post">
+<form accept-charset="utf-8" method="post">
+    @csrf
     <div class="row mt-4">
         <div class="col">
             <nav aria-label="breadcrumb">
@@ -48,9 +49,11 @@
                     <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
                 </li> --}}
             </div>
+            
             <div class="tab-content">
+                
                 @foreach ($shows as $row)
-                    <div class="tab-pane fade" id="studio-{{ $row->name }}" role="tabpanel" aria-labelledby="studio-{{ $row->name }}-tab">
+                <div class="tab-pane fade" id="studio-{{ $row->name }}" role="tabpanel" aria-labelledby="studio-{{ $row->name }}-tab" data-play="{{ $row->pid }}">
                         
                         {{-- Seat Layout Settings --}}
 
@@ -76,7 +79,8 @@
                                 <div class="row mr-md-auto">
                                     @for ($i = 0; $i < $side; $i++)
                                     <div class="col-6 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" data-on="Booked" data-off="A{{ $i }}" data-onstyle="danger" data-toggle="toggle" data-size="sm">
+                                        <input type="checkbox" class="seat {{ $class }}" value="A{{ $i }}" name="seats[]" data-play=""
+                                        data-on="Booked" data-off="A{{ $i }}" data-onstyle="danger" data-toggle="toggle" data-size="sm"  value="A{{ $i }}">
                                     </div>
                                     @endfor
                                 </div>
@@ -87,8 +91,8 @@
                                 <div class="row mx-md-auto">
                                     @for ($i = 0; $i < $center; $i++)
                                         <div class="col-2 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}"
-                                            data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm"/>
+                                            <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}" name="seats[]"
+                                            data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm" value="B{{ $i }}" data-play="">
                                         </div>
                                     @endfor
                                 </div>
@@ -99,7 +103,8 @@
                                 <div class="row ml-md-auto">
                                     @for ($i = 0; $i < $side; $i++)
                                     <div class="col-6 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" data-on="Booked" data-off="C{{ $i }}" data-onstyle="primary" data-toggle="toggle" data-size="sm">
+                                        <input type="checkbox" class="seat {{ $class }}" data-on="Booked" value="C{{ $i }}" name="seats[]"
+                                        data-off="C{{ $i }}" data-onstyle="primary" data-toggle="toggle" data-size="sm" data-play="">
                                     </div>
                                     @endfor
                                 </div>
@@ -128,22 +133,38 @@
                 </div>
                 <div class="col">
                     <button data-target="#payment" data-toggle="modal" type="button" class="mb-3 btn btn-danger float-right">Proceed to Payment <i class="fad fa-credit-card"></i></button>
+                    <!-- Modal Payment -->
                     <div class="modal fade" id="payment" role="dialog" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Finalization</h5>
+                                    <h5 class="modal-title">Check Out</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    {{-- Some Data --}}
                                     
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="pay">Payment Method</label>
+                                        </div>
+                                        <select class="custom-select" id="pay" name="method">
+                                            <option selected>Please select one</option>
+                                            <option value="Gopay">Gopay</option>
+                                            <option value="OVO">OVO</option>
+                                            <option value="debit">Debit Card</option>
+                                            <option value="credit">Credit Card</option>
+                                        </select>
+                                    </div>
+                                    <div class="list-group">
+                                        
+                                    </div>
+                                    <p id="confirmation"></p>                                    
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary">Check Out</button>
+                                    <button id="checkoutOke" type="submit" class="btn btn-primary">Check Out</button>
                                 </div>
                             </div>
                         </div>
@@ -152,32 +173,78 @@
             </div>
         </div>
     </div>
-    <div class="row pt-3">
-        <div class="col-lg-3">
+    <input type="hidden" name="total" value="">
+    <input type="hidden" name="seat" value="">
+    <input type="hidden" name="playing" value="{{$seat[0]->id}}">
 
-        </div>
-        <div class="col-lg-9">
-            <!-- Sebelumnya disini -->
-        </div>
-    </div>
 </form>
 @endsection
 
 @section('script')
 <script>
+    const seat = @json('seat');
+    console.log(seat);
     let formatter = new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
     });
 
     $(document).ready(() => {
-        $('input[type="checkbox"].seat').change(() => {
+
+        $('div.tab-pane.fade').each(function () {
+            $(this).find('input[type="checkbox"].seat').attr('data-play', $(this).attr('data-play'));
+        });
+        // $('div.tab-pane.fade').find('input[type="checkbox"].seat').attr('data-play', $(this).attr('data-play'));
+        $('span.total').text('Rp 0,00');
+        $('#checkoutOke').prop('disabled', true);
+        $('div.col>button').prop('disabled', true);
+        $('input[type="checkbox"]').change(() => {
             let lux = $('input.seat.deluxe:checked').length * 75000; // Premiere Price
             let std = $('input.seat.classic:checked').length * 50000; // Standard Price
-            $('span.total').html(formatter.format(lux + std))
-        });
+            let total = lux + std; // Total Price
 
-        $('table').DataTable();
+            $('span.total').html(formatter.format(total))
+            
+            let checkSeat = $('input[type="checkbox"].seat:checked');
+            let allSeat = [];
+            let displaySeat = "";
+
+            // Loop Through Every Seat that checked and store in array
+            $.each(checkSeat,(index,value) => {
+                allSeat.push($(value).val())
+                // Parse every seat into readable text
+                $.each(allSeat, (index, value) => {
+                    if (index == 0) {
+                        displaySeat = value
+                    } else {
+                        displaySeat = displaySeat +  ", " + value
+                    }
+                    index++;         
+                });
+            });
+
+            // Disabled button when not checked
+            if (checkSeat.length == 0) {
+                $('div.col>button').prop('disabled', true);
+                $('#confirmation').html(`You doesn't have select seat yet`);
+            } else if ($('input[type="checkbox"].seat:checked').length == 1) {
+                $('div.col>button').prop('disabled', false);
+                $('#confirmation').html(`Are you sure want to checkout with ${checkSeat.length} seat in ${displaySeat} for ${total}?`);
+            } else {
+                $('div.col>button').prop('disabled', false);
+                $('#confirmation').html(`Are you sure want to checkout with ${checkSeat.length} seats in ${displaySeat} for ${total}?`);
+            }
+
+            $('input[name=total]:hidden').val(total);
+            // $('input[name=seat]:hidden').val(allSeat);
+        });
+        $('#pay').on('change',function (){
+            if(this.value!="Please select one"){
+                $('#checkoutOke').prop('disabled', false);
+            }else{
+                $('#checkoutOke').prop('disabled', true);
+            }
+        });
     });
 </script>
 @endsection

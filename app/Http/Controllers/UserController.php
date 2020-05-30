@@ -185,45 +185,77 @@ class UserController extends Controller
             'bio' => 'nullable|max:500'
         ]);
 
-        $user = Auth::user(); 
-        dd($user);
+        $user = Auth::user();
 
         $file = $req->file('photo');
 
         if ($file)
         {
-            Storage::disk('local')->put('profile/' . $file, File::get($file));
             $photo = $user->id . '.' . $file->extension();
+            Storage::disk('local')->put('profile/' . $file, File::get($file));
+        }
+        else
+        {
+            $photo = $user->photo;
         }
 
+        DB::table('users')
+            ->where('id', $user->id)
+            ->update(
+                [
+                    'firstname' => $req->firstname,
+                    'lastname' => $req->lastname,
+                    'username' => $req->username,
+                    'email' => $req->email,
+                    'birthdate' => $req->birthdate,
+                    'gender' => $req->gender,
+                    'phone' => $req->phone,
+                    'bio' => $req->bio,
+                    'photo' => $photo,
+                ]
+            );
 
-        $user->firstname = $req['firstname'];
-        $user->lastname = $req['lastname'];
-        $user->username = $req['username'];
-        $user->email = $req['email'];
-        $user->birthdate = $req['birthdate'];
-        $user->gender = $req['gender'];
-        $user->phone = $req['phone'];
-        $user->bio = $req['bio'];
-        $user->photo = $photo;
+        // $user->firstname = $req['firstname'];
+        // $user->lastname = $req['lastname'];
+        // $user->username = $req['username'];
+        // $user->email = $req['email'];
+        // $user->birthdate = $req['birthdate'];
+        // $user->gender = $req['gender'];
+        // $user->phone = $req['phone'];
+        // $user->bio = $req['bio'];
+        // $user->photo = $photo;
 
-        $user->update();
+        // $user->update();
         
-        /*
-        $user->update([
-            'firstname' => $req->firstname,
-            'lastname'=> $req->lastname,
-            'username' => $req->username,
-            'email' => $req->email,
-            'birthdate' => $req->birthdate,
-            'gender' => $req->gender,
-            'phone' => $req->phone,
-            'bio' => $req->bio,
-            'photo' => $photo,
-        ]);
-        */
+        // $user->save([
+        //     'firstname' => $req->firstname,
+        //     'lastname'=> $req->lastname,
+        //     'username' => $req->username,
+        //     'email' => $req->email,
+        //     'birthdate' => $req->birthdate,
+        //     'gender' => $req->gender,
+        //     'phone' => $req->phone,
+        //     'bio' => $req->bio,
+        //     'photo' => $photo,
+        // ]);
         
         return redirect()->route('profile', ['id' => $user->id]);
+
+        // Redirect
+        // return redirect('profile/{id}',['id'=>$id]);
+        // return redirect('')
+    }
+}
+' => $req->email,
+        //     'birthdate' => $req->birthdate,
+        //     'gender' => $req->gender,
+        //     'phone' => $req->phone,
+        //     'bio' => $req->bio,
+        //     'photo' => $photo,
+        // ]);
+        
+        return redirect()->route('profile', ['id' => $user->id]);
+
         // Redirect
         // return redirect('profile/{id}',['id'=>$id]);
         // return redirect('')

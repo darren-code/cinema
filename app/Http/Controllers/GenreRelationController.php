@@ -43,7 +43,7 @@ class GenreRelationController extends Controller
     }
     public function destroy($id)
     {
-        // Delete Movie
+        // Delete Genre Relation
         GenreRelation::destroy($id);
 
         // Store message

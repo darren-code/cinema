@@ -10,13 +10,12 @@
             <div class="modal-body">
                 @if (isset($branches))
                     @foreach ($branches as $row)
-                        <a type="button" class="btn btn-primary" href="{{ route('movie', ['branch' => $row->id]) }}">{{ $row->location }}</a>
+                        <a type="button" class="btn btn-primary mt-1" href="{{ route('movie', ['branch' => $row->id]) }}">{{ $row->location }}</a>
                     @endforeach
                 @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary {{ Session::has('location') ? '' : 'd-none' }}" data-dismiss="modal">Cancel</button>
-                {{-- <a type="button" class="btn btn-primary" href="{{ route('movie', ['branch' => $row->id]) }}">Check Out</a> --}}
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 @if(count($errors) > 0)
-    <div class="row alert-area">
+    <div class="row alert-area" style="z-index: 5">
         <div class="col-md-6 offset-md-3 alert-itself">
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -13,7 +13,7 @@
     </div>
 @endif
 @if(Session::has('message'))
-<div class="row alert-area">
+<div class="row alert-area" style="z-index: 5">
     <div class="col-md-6 offset-md-3 alert-itself">
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>{{ Session::get('message') }}</strong>

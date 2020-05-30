@@ -32,7 +32,7 @@
             @if (isset($upcoming))
             @foreach ($upcoming->unique('title') as $row)
             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <a href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $row->id]) }}">
+                <a href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $row->mid]) }}">
                 @if (Storage::disk('local')->has('poster/' . $row->poster))
                     <img class="img-fluid img-thumbnail rounded" src="{{ route('movie.poster', ['filename' => $row->poster]) }}" alt="{{ $row->title }}">
                 @endif

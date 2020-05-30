@@ -66,12 +66,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="icon-big icon-danger text-center float-left">
-                                <i class="fad fa-ticket"></i>
+                                <i class="fad fa-shopping-cart"></i>
                             </div>
                         </div>
                         <div class="col">
                             <div class="numbers">
-                                <p>Ticket</p>
+                                <p>Order</p>
                                 {{$orders->count()}}
                             </div>
                         </div>
@@ -88,6 +88,60 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
+            <div class="card">
+                <div class="content">
+                    <div class="row">
+                        <div class="col">
+                            <div class="icon-big icon-danger text-center float-left">
+                                <i class="fad fa-ticket"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="numbers">
+                                <p>Tickets</p>
+                                {{$tickets->count()}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <hr/>
+                        <div class="stats">
+                            <a href="{{url('/admin/ticket')}}">
+                                <i class="fad fa-info-square"></i> Details
+                            </a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-6">
+            <div class="card">
+                <div class="content">
+                    <div class="row">
+                        <div class="col">
+                            <div class="icon-big icon-danger text-center float-left">
+                                <i class="fad fa-store-alt"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="numbers">
+                                <p>Branch</p>
+                                {{$branch->count()}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <hr/>
+                        <div class="stats">
+                            <a href="{{url('/admin/branch')}}">
+                                <i class="fad fa-info-square"></i> Details
+                            </a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-6">
             <div class="card">
                 <div class="content">
                     <div class="row">

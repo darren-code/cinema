@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Genre;
 use App\Movie;
+use App\Order;
+use App\Ticket;
 use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -167,15 +170,14 @@ class MovieController extends Controller
     {
         $movies = DB::table('movies as m')
             ->join('playing_relation as p', 'm.id', '=', 'p.movie')
-            ->select('m.title', 'm.released', 'm.poster', 'm.id as mid', 'p.branch as bid')
-            ->where('m.avail', 1)->where('p.branch', $branch);
+            ->select('m.title', 'm.released', 'm.poster', 'm.id as mid', 'p.branch as bid');
 
-        $data = DB::table('playing_relation')
-            ->join('movies', 'playing_relation.movie', '=', 'movies.id')
-            ->join('branch', 'playing_relation.branch', '=', 'branch.id')
-            ->select('movies.*', 'branch.*')
-            ->where('branch.id', $branch)
-            ->orderBy('movies.released', 'desc');
+        $data = DB::table('playing_relation as pr')
+            ->join('movies as m', 'pr.movie', '=', 'm.id')
+            ->join('branch as b', 'pr.branch', '=', 'b.id')
+            ->select('m.id as mid', 'b.*', 'm.title', 'm.poster', 'm.released')
+            ->where('b.id', $branch)
+            ->orderBy('m.released', 'desc');
 
         /*
         $data = DB::table('playing_relation as p')
@@ -189,8 +191,8 @@ class MovieController extends Controller
         Session::put('location', $branch);
         
         return view('front.movie.home', [
-            'nowready' => $movies->take(4)->get(),
-            'upcoming' => $data->where('movies.avail', 2)->take(4)->get(),
+            'nowready' => $movies->where('m.avail', 1)->where('p.branch', $branch)->take(4)->get(),
+            'upcoming' => $data->where('m.avail', 2)->take(4)->get(),
             'morefilm' => DB::table('movies')->orderBy('released', 'asc')->take(8)->get(),
             'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
@@ -235,6 +237,25 @@ class MovieController extends Controller
             ->select('g.genre')
             ->where('gr.movie', $id)->get();
 
+        $casts = DB::table('cast_relation as cr')
+            ->join('casts as c', 'cr.cast', '=', 'c.id')
+            ->join('movies as m', 'cr.movie', '=', 'm.id')
+            ->select('c.name')
+            ->where('cr.movie', $id)->get();
+
+        $rating = DB::table('reviews')
+            ->where('movie', $id);
+
+        $reviews = DB::table('reviews as r')
+            ->join('users as u', 'r.user', '=', 'u.id')
+            ->select('u.username', 'r.header', 'r.content', 'r.rating')
+            ->where('movie', $id)
+            ->orderBy('r.id', 'desc')
+            ->take(3)
+            ->get();
+
+        $check = DB::table('reviews as r')->where('user', Auth::user()->id)->first();
+
         $movie = Movie::where('id', $id)->first();
 
         if (Session::get('age') < $movie->parental)
@@ -247,6 +268,10 @@ class MovieController extends Controller
             'shows' => $related,
             'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
             'genres' => $genres,
+            'casts' => $casts,
+            'rating' => $rating->avg('rating'),
+            'reviews' => $reviews,
+            'flag' => $check,
         ]);
     }
 
@@ -257,7 +282,7 @@ class MovieController extends Controller
                     ->join('studios', 'playing_relation.studio', '=', 'studios.id')
                     ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
                     ->join('branch', 'playing_relation.branch', '=', 'branch.id')
-                    ->select('studios.*', 'showtimes.*', 'movies.*', 'branch.*')
+                    ->select('studios.*', 'showtimes.*', 'movies.*', 'branch.*', 'playing_relation.id as pid')
                     // ->select('movies.*')
                     ->orderBy('name')
                     ->where('movies.id', $id)
@@ -265,12 +290,60 @@ class MovieController extends Controller
                     ->where('branch.id', $branch)
                     ->get();
 
+        $seat = DB::table('playing_relation')
+            ->join('movies', 'playing_relation.movie', '=', 'movies.id')
+            ->join('studios', 'playing_relation.studio', '=', 'studios.id')
+            ->join('showtimes', 'playing_relation.showtime', '=', 'showtimes.id')
+            ->join('branch', 'playing_relation.branch', '=', 'branch.id')
+            ->join('tickets','playing_relation.id','=','tickets.playing')
+            ->select('tickets.seat', 'playing_relation.id')
+            ->where('movies.id', $id)
+            ->where('showtimes.time', $time)
+            ->where('branch.id', $branch)
+            ->get();
+
+
         return view('front.movie.seat', [
             'movie' => Movie::where('id', $id)->first(),
             'shows' => $related,
             'time' => $time,
+            'seat' => $seat,
             'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
+    }
+
+    public function checkout(Request $req,$id){
+        // date_default_timezone_set('Asia/Jakarta');
+
+        // $now = date('Y-m-d H:i:s');
+        // dd($now);
+        dd($req);
+        $req->validate([
+            'total'=> 'required|numeric',
+            'method'=>'required',
+            // 'seat' => 'required',
+            // 'cost' => 'required|numeric',
+            // 'playing' => 'required'
+        ]);
+        
+        Order::create([
+            'total'=> $req->total, // belum dapat
+            'method' => $req->method,
+            // 'time' => $now;
+            'isPaid' => 0,
+            'user' => Auth::user()->id,
+        ]);
+
+        // foreach
+        Ticket::create([
+            // 'seat' => $req->seats, // ubah ke json dulu 
+            'cost' => $req->cost, 
+            // 'transaction' => $req->transaction, // id transaksi
+            'playing' => $req->playing,
+        ]); 
+
+        // return view('admin.front.movie');
+
     }
 
     public function browse_movies()
@@ -374,6 +447,27 @@ class MovieController extends Controller
             'genres' => DB::table('genres')->get(),
             'data' => $request->all(),
         ]);
+    }
+
+    public function comment(Request $request, $user, $movie)
+    {
+        $last = DB::table('reviews')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        DB::table('reviews')
+            ->insert(
+                [
+                    'id' => ($last->id + 1),
+                    'content' => $request->content,
+                    'header' => $request->header,
+                    'user' => $user,
+                    'movie' => $movie,
+                    'rating' => $request->rating
+                ]
+            );
+
+        return redirect()->route('movie.details', ['branch' => Session::get('location'), 'id' => $movie]);
     }
 
     /*

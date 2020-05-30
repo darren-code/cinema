@@ -37,6 +37,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js" integrity="sha384-97pmbvZb0qdIXSwrjd4JuG6+4TJhp4eL0totTka0FF1Bf2E42dPiSXsqq09yQxjD" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" integrity="sha384-RxzVJNpULMjRDJ3nd+aAVYb11VBDmhgIonMdvYdLxYvylOdEl6pprk4R4PK0t3xG" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha384-XS84aqWsn4cbfnAhdoO7kFSYtPxyAx70hgIXAzIzEtzPI1WL5g99awOOAhsmnetW" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.2.0/jquery.fitvids.min.js" integrity="sha384-W7/HidNgcysTt7v0T8SHY9YhPlsvR98CxsMlhi6MLImQ/xpNb9TC1GTNmLzEEQKK" crossorigin="anonymous"></script>
 
         @yield('script')
 

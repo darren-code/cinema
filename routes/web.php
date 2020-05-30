@@ -54,9 +54,19 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'movie.seat'
         ]);
 
+        Route::post('/movie/{branch}/{id}/{time}', [
+            'uses' => 'MovieController@checkout',
+            'as' => 'movie.checkout'
+        ]);
+
         Route::get('/profile/edit/{id}', [
             'uses' => 'UserController@edit',
             'as' => 'user.edit'
+        ]);
+
+        Route::post('comment/{user}/{movie}', [
+            'uses' => 'MovieController@comment',
+            'as' => 'user.review'
         ]);
 
         // Route::post('profile/update','UserController@update');
@@ -155,7 +165,11 @@ Route::group(['middleware' => ['web']], function () {
             // Orders
             Route::resource('/order','OrderController');
             Route::get('/order/confirm/{id}','OrderController@approve')->name('order.approve');
-            
+            Route::get('/order/pending/{id}','OrderController@pending')->name('order.pending');
+
+            // Tickets
+            Route::resource('/ticket','TicketController');
+
             // Users
             Route::resource('/users','UserController');
 

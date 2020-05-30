@@ -15,37 +15,71 @@
             </div>
             <div class="content table-responsive">
                 <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Total Price</th>
-                            <th>Payment Method </th>
-                            <th>Order Time</th>
-                            <th>Status</th>
-                            <!-- <th>Action</th> -->
-                        </tr>
-                    </thead>
                     <tbody>
                         @foreach($order as $order => $value)
                         <tr>
+                            <th>Order ID</th>
                             <td>{{$value->id}}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Price</th>
                             <td>{{$value->total}}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
                             <td>{{$value->method}}</td>
+                        </tr>
+                        <tr>
+                            <th>Order Time</th>
                             <td>{{$value->time}}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
                             <td>
-                                @if(isset($orders[0]->payment))
+                                @if($value->isPaid == 0)
                                     <span for="" class="label label-success">Confirmed</span>
                                 @else
                                     <span for="" class="label label-warning">Pending</span>
                                 @endif
                             </td>
-                            <!-- <td>
-                                {{link_to_route('order.approve','Approve',$value->id,['class'=>'btn btn-info btn-sm '])}}
-                            </td> -->
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Tickets in this Order</h4>
+            </div>
+            <div class="content table-responsive table-full-width">
+            @if(isset($tickets[0]))
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Seat</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($tickets as $ticket => $t)
+                            <tr>
+                                <td>{{$t->id}}</td>
+                                <td>{{$t->seat}}</td>
+                                <td>{{$t->cost}}</td>
+                            </tr>
+                        @endforeach
+                        
+                    </tbody>
+                </table>
+                @else
+                    <p class="text-center">
+                        No Ticket booked yet
+                    </p>
+                @endif
             </div>
         </div>
     </div>

@@ -9,28 +9,61 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    /*
+        Admin Panel
+    */
     public function index()
     {
         $orders = DB::table('transaction as t')
             ->join('users as u','u.id','=','t.user')
-            ->select('t.id','t.total','t.method','t.time','u.username')
+            ->select('t.id','t.total','t.method','t.time','t.isPaid','u.username')
             ->get();
         return view('admin.orders.index',compact('orders'));
     }
     public function show($id)
     {
-        $order = Order::where('id',$id)->get();
-        $orders = DB::table('transaction as t')
-            ->join('paid_tickets as pt','t.id','=','pt.payment')
-            // ->select('t.id','t.total','t.method','t.time','pt.payment')
-            ->select('pt.payment')
+        $order = DB::table('transaction as t')
+            ->join('users as u','u.id','=','t.user')
+            ->select('t.id','t.total','t\.method','t.time','t.isPaid','u.username')
             ->where('t.id',$id)
             ->get();
-        return view('admin.orders.details',compact('order','orders'));
+
+        $tickets = DB::table('transaction as t')
+            ->join('tickets as ti','t.id','=','ti.transaction')
+            ->select('ti.*')
+            ->where('t.id',$id)
+            ->get();
+
+        return view('admin.orders.details',compact('order','tickets'));
     }
     public function approve($id)
     {
-        // Proses approve 
+        // Update order
+        $order = Order::find($id);
 
+        $order->update([
+            'isPaid'=>1
+        ]);
+
+        // Store message session
+        session()->flash('msg','Order has been approved.');
+
+        // Redirect
+        return redirect('admin/order');
+    }
+    public function pending($id)
+    {
+        // Update order
+        $order = Order::find($id);
+
+        $order->update([
+            'isPaid'=>0
+        ]);
+
+        // Store message session
+        session()->flash('msg','Order has been pending.');
+
+        // Redirect
+        return redirect('admin/order');
     }
 }

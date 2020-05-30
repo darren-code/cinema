@@ -19,10 +19,10 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>User</th>
+                            <th>Username</th>
                             <th>Total</th>
                             <th>Method</th>
-                            <th>Time</th>
+                            <th>Order Time</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
