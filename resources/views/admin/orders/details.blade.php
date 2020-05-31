@@ -36,10 +36,12 @@
                         <tr>
                             <th>Status</th>
                             <td>
-                                @if($value->isPaid == 0)
-                                    <span for="" class="label label-success">Confirmed</span>
+                                @if($value->isPaid == 1)
+                                    <span for="" class="label label-success">Paid Already</span>
+                                    {{link_to_route('order.pending','Pending This Transaction',$value->id,['class'=>'btn btn-warning btn-sm float-right'])}}
                                 @else
-                                    <span for="" class="label label-warning">Pending</span>
+                                    <span for="" class="label label-warning">Not Paid Yet</span>
+                                    {{link_to_route('order.confirm','Confirm This Transaction',$value->id,['class'=>'btn btn-success btn-sm float-right'])}}
                                 @endif
                             </td>
                         </tr>
@@ -54,7 +56,7 @@
             <div class="header">
                 <h4 class="title">Tickets in this Order</h4>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
             @if(isset($tickets[0]))
                 <table class="table table-striped">
                     <thead>

@@ -69,8 +69,12 @@ class GenreController extends Controller
             'genre'=>'required|unique:genres,genre,'.$id.',id',
         ]);
 
+        $data->update([
+            'genre' => $req->genre,
+        ]);
+
         // Store message session
-        $req->session()->flash('msg','Genre Relation has been updated');
+        $req->session()->flash('msg','Genre has been updated');
         
         // Redirect
         return redirect('admin/genre');

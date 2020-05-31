@@ -48,7 +48,8 @@ class StudioController extends Controller
             ->join('playing_relation as pr','s.id','=','pr.studio')
             ->join('tickets as t','pr.id','=','t.playing')
             ->join('showtimes as st','st.id','=','pr.showtime')
-            ->select('t.row','t.seat')
+            ->select('t.seat')
+            ->orderBy('t.seat')
             ->where('s.id',$id)
             ->where('st.time',$time)
             ->get();

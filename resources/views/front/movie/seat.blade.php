@@ -6,14 +6,14 @@
 
 {{-- @section('header') --}}
 @section('content')
-<form accept-charset="utf-8" method="post">
+<form accept-charset="utf-8" method="post" action="{{ route('user.book') }}">
     @csrf
     <div class="row mt-4">
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('movie.details', ['id' => $movie->id, 'branch' => Session::get('location')]) }}">{{ $movie->title }}</a></li>
-                    <li class="breadcrumb-item active"><a href="#">{{ date('G.i', strtotime($time)) }}</a></li>
+                    <li class="breadcrumb-item active"><a href="#">{{ date('G.i', strtotime($time)) }}</a></li> 
                 </ol>
             </nav>
         </div>
@@ -34,7 +34,7 @@
                 @foreach ($shows as $row)
                     <a class="list-group-item list-group-item-action" id="studio-{{ $row->name }}-tab" data-toggle="pill" href="#studio-{{ $row->name }}" role="tab">
                         Studio {{ $row->name }}
-                        <span class="badge badge-primary badge-pill float-right">
+                        <span id="remain" class="badge badge-primary badge-pill float-right {{ $row->class == 1 ? 'deluxe' : 'classic' }}">
                             {{-- Total Available Seat --}}
                         </span>
                     </a>
@@ -53,7 +53,12 @@
             <div class="tab-content">
                 
                 @foreach ($shows as $row)
-                <div class="tab-pane fade" id="studio-{{ $row->name }}" role="tabpanel" aria-labelledby="studio-{{ $row->name }}-tab" data-play="{{ $row->pid }}">
+                <div class="tab-pane fade" id="studio-{{ $row->name }}" role="tabpanel" data-play="{{ $row->pid }}"
+                    data-flag="" data-cost="{{ $row->class == 1 ? 75000 : 50000 }}" data-studio="{{ $row->name }}">
+
+                        @php
+                            $pid = $row->pid;
+                        @endphp
                         
                         {{-- Seat Layout Settings --}}
 
@@ -78,9 +83,24 @@
                                 <h4 class="d-lg-none d-md-none d-xl-none text-center pb-3 text-danger">Left Row</h4>
                                 <div class="row mr-md-auto">
                                     @for ($i = 0; $i < $side; $i++)
+                                    @php
+                                        $disable = 0;
+                                        foreach ($asec as $book)
+                                        {
+                                            if ($pid == $book->id && $book->seat == ('A' . $i))
+                                            {
+                                                $disable = 1;
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                $disable = 0;
+                                            }
+                                        }
+                                    @endphp
                                     <div class="col-6 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" value="A{{ $i }}" name="seats[]" data-play=""
-                                        data-on="Booked" data-off="A{{ $i }}" data-onstyle="danger" data-toggle="toggle" data-size="sm"  value="A{{ $i }}">
+                                        <input type="checkbox" class="seat {{ $class }}" value="A{{ $i }}" name="seat[]" data-play="" data-cost="" data-flag=""
+                                        data-on="Booked" data-off="A{{ $i }}" data-onstyle="danger" data-toggle="toggle" data-size="sm"  value="A{{ $i }}" data-studio="" {{ $disable == 1 ? 'disabled' : '' }}>
                                     </div>
                                     @endfor
                                 </div>
@@ -90,9 +110,24 @@
                                 <h4 class="d-lg-none d-md-none d-xl-none text-center pb-3 text-success">Center Row</h4>
                                 <div class="row mx-md-auto">
                                     @for ($i = 0; $i < $center; $i++)
+                                        @php
+                                            $disable = 0;
+                                            foreach ($bsec as $book)
+                                            {
+                                                if ($pid == $book->id && $book->seat == ('B' . $i))
+                                                {
+                                                    $disable = 1;
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    $disable = 0;
+                                                }
+                                            }
+                                        @endphp
                                         <div class="col-2 pb-3">
-                                            <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}" name="seats[]"
-                                            data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm" value="B{{ $i }}" data-play="">
+                                            <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}" name="seat[]" {{ $disable == 1 ? 'disabled' : '' }}
+                                            data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm" value="B{{ $i }}" data-play="" data-cost="" data-studio="">
                                         </div>
                                     @endfor
                                 </div>
@@ -102,10 +137,25 @@
                                 <h4 class="d-lg-none d-md-none d-xl-none text-center pb-3 text-primary">Right Row</h4>
                                 <div class="row ml-md-auto">
                                     @for ($i = 0; $i < $side; $i++)
-                                    <div class="col-6 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" data-on="Booked" value="C{{ $i }}" name="seats[]"
-                                        data-off="C{{ $i }}" data-onstyle="primary" data-toggle="toggle" data-size="sm" data-play="">
-                                    </div>
+                                        @php
+                                            $disable = 0;
+                                            foreach ($csec as $book)
+                                            {
+                                                if ($pid == $book->id && $book->seat == ('C' . $i))
+                                                {
+                                                    $disable = 1;
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    $disable = 0;
+                                                }
+                                            }
+                                        @endphp
+                                        <div class="col-6 pb-3">
+                                            <input type="checkbox" class="seat {{ $class }}" data-on="Booked" value="C{{ $i }}" name="seat[]" data-cost=""
+                                            data-off="C{{ $i }}" data-onstyle="primary" data-toggle="toggle" data-size="sm" data-play="" data-studio="" {{ $disable == 1 ? 'disabled' : '' }}>
+                                        </div>
                                     @endfor
                                 </div>
                             </div>
@@ -158,7 +208,6 @@
                                         </select>
                                     </div>
                                     <div class="list-group">
-                                        
                                     </div>
                                     <p id="confirmation"></p>                                    
                                 </div>
@@ -174,8 +223,9 @@
         </div>
     </div>
     <input type="hidden" name="total" value="">
-    <input type="hidden" name="seat" value="">
-    <input type="hidden" name="playing" value="{{$seat[0]->id}}">
+    <input type="hidden" name="seats" value="">
+    <input type="hidden" name="count" value="">
+    {{-- <input type="hidden" name="playing" value="{{$seat[0]->id}}"> --}}
 
 </form>
 @endsection
@@ -189,10 +239,12 @@
         currency: 'IDR',
     });
 
-    $(document).ready(() => {
+    $(document).ready(function () {
 
         $('div.tab-pane.fade').each(function () {
             $(this).find('input[type="checkbox"].seat').attr('data-play', $(this).attr('data-play'));
+            $(this).find('input[type="checkbox"].seat').attr('data-cost', $(this).attr('data-cost'));
+            $(this).find('input[type="checkbox"].seat').attr('data-studio', $(this).attr('data-studio'));
         });
         // $('div.tab-pane.fade').find('input[type="checkbox"].seat').attr('data-play', $(this).attr('data-play'));
         $('span.total').text('Rp 0,00');
@@ -208,20 +260,34 @@
             let checkSeat = $('input[type="checkbox"].seat:checked');
             let allSeat = [];
             let displaySeat = "";
-
+            let studioName = "";
             // Loop Through Every Seat that checked and store in array
-            $.each(checkSeat,(index,value) => {
-                allSeat.push($(value).val())
+            $.each(checkSeat, function (index, value) {
+                allSeat.push({
+                    seat : $(value).val(),
+                    play : $(this).attr('data-play'),
+                    cost : $(this).attr('data-cost'),
+                    studio : $(this).attr('data-studio'),
+                })
                 // Parse every seat into readable text
                 $.each(allSeat, (index, value) => {
                     if (index == 0) {
-                        displaySeat = value
+                        studioName = value.studio
+                        displaySeat = "Studio "+ studioName +" with seat number "+ value.seat
                     } else {
-                        displaySeat = displaySeat +  ", " + value
+                        if(value.studio!=studioName){
+                            studioName = value.studio;
+                            displaySeat = displaySeat + " and Studio "+ studioName +" with seat number "+ value.seat
+                        }else{
+                            displaySeat = displaySeat +  ", " + value.seat
+                        }
                     }
-                    index++;         
+                    index++;
                 });
             });
+
+            let seats = JSON.stringify(allSeat);
+            console.log(seats);
 
             // Disabled button when not checked
             if (checkSeat.length == 0) {
@@ -235,16 +301,26 @@
                 $('#confirmation').html(`Are you sure want to checkout with ${checkSeat.length} seats in ${displaySeat} for ${total}?`);
             }
 
+            let count = $("input:checked").length;
+
             $('input[name=total]:hidden').val(total);
-            // $('input[name=seat]:hidden').val(allSeat);
+            $('input[name=seats]:hidden').val(seats);
+            $('input[name=count]:hidden').val(count);
+
         });
-        $('#pay').on('change',function (){
+
+        $('#pay').on('change', function () {
             if(this.value!="Please select one"){
                 $('#checkoutOke').prop('disabled', false);
             }else{
                 $('#checkoutOke').prop('disabled', true);
             }
         });
+
+        let stdrem = 80 - $('input.seat.classic:disabled').length;
+        let luxrem = 40 - $('input.seat.deluxe:disabled').length;
+        $('span#remain.deluxe').html(luxrem);
+        $('span#remain.classic').html(stdrem);
     });
 </script>
 @endsection

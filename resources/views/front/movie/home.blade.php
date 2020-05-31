@@ -9,7 +9,7 @@
 @include('includes.alert')
 
     @if (Session::has('location'))
-        <h3 class="mt-3 text-center">Now Showing</h3>
+        <h3 class="mt-3">Now Showing</h3>
         <div class="row justify-content-center">
             @if (isset($nowready))
                 @foreach ($nowready->unique('title') as $row)

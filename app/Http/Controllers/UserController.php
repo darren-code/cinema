@@ -125,26 +125,23 @@ class UserController extends Controller
                 ->join('users as u','u.id','=','t.user')
                 ->select('t.*')
                 ->where('u.id',$id)
-                ->get();
-
-        $status = DB::table('transaction as t')
-                ->join('users as u','u.id','=','t.user')
-                ->select('t.*')
-                ->where('u.id',$id)
+                ->orderBy('time', 'desc')
+                ->take(3)
                 ->get();
 
         $rating = DB::table('users as u')
-        ->join('reviews as r','r.user','=','u.id')
-        ->join('movies as m', 'r.movie', '=', 'm.id')
-        ->select('r.*', 'm.title', 'm.id as mid')
-        ->where('u.id',$id);
+                ->join('reviews as r','r.user','=','u.id')
+                ->join('movies as m', 'r.movie', '=', 'm.id')
+                ->select('r.*', 'm.title', 'm.id as mid')
+                ->where('u.id',$id)
+                ->orderBy('id', 'desc')
+                ->take(2);
         
         return view('front.user.profile', [
             'user' => Auth::user(),
             'history' => $history,
             'rating' => $rating->get(),
             'total' => $rating->avg('rating'),
-            'status' => $status,
         ]);
     }
 
@@ -177,8 +174,8 @@ class UserController extends Controller
         $req->validate( [
             'firstname' => 'required|max:120',
             'lastname' => 'required|max:120',
-            'username' => 'required|min:6|unique:users|max:30',
-            'email' => 'required|email|unique:users|max:120',
+            // 'username' => 'required|min:6|unique:users|max:30',
+            // 'email' => 'required|email|unique:users|max:120',
             'birthdate' => 'required|date|before:-3 years',
             'phone' => 'required|regex:/(08)[0-9]{9}/',
             'gender' => 'required',
@@ -205,8 +202,8 @@ class UserController extends Controller
                 [
                     'firstname' => $req->firstname,
                     'lastname' => $req->lastname,
-                    'username' => $req->username,
-                    'email' => $req->email,
+                    // 'username' => $req->username,
+                    // 'email' => $req->email,
                     'birthdate' => $req->birthdate,
                     'gender' => $req->gender,
                     'phone' => $req->phone,
@@ -232,21 +229,6 @@ class UserController extends Controller
         //     'lastname'=> $req->lastname,
         //     'username' => $req->username,
         //     'email' => $req->email,
-        //     'birthdate' => $req->birthdate,
-        //     'gender' => $req->gender,
-        //     'phone' => $req->phone,
-        //     'bio' => $req->bio,
-        //     'photo' => $photo,
-        // ]);
-        
-        return redirect()->route('profile', ['id' => $user->id]);
-
-        // Redirect
-        // return redirect('profile/{id}',['id'=>$id]);
-        // return redirect('')
-    }
-}
-' => $req->email,
         //     'birthdate' => $req->birthdate,
         //     'gender' => $req->gender,
         //     'phone' => $req->phone,

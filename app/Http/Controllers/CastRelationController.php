@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\GenreRelation;
+use App\CastRelation;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,46 +11,47 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
-class GenreRelationController extends Controller
+class CastRelationController extends Controller
 {
     /*
         Admin Panel
     */
     public function index()
     {
-        $data = DB::table('genre_relation as gr')
-        ->join('movies as m','m.id','=','gr.movie')
-        ->join('genres as g','g.id','=','gr.genre')
-        ->select('m.title','m.id as movie_id','gr.*','g.genre','g.id as genre_id')
+        $data = DB::table('cast_relation as cr')
+        ->join('movies as m','m.id','=','cr.movie')
+        ->join('casts as c','c.id','=','cr.cast')
+        ->select('m.title','m.id as movie_id','cr.*','c.name','c.id as cast_id')
+        ->orderBy('cr.id')
         ->get();
 
-        return view('admin.genrerelation.index',compact('data'));
+        return view('admin.castrelation.index',compact('data'));
     }
     public function create()
     {
-
         $data_movie = DB::table('movies as m')
         ->select('m.title','m.id')
         ->get();
 
-        $data_genre = DB::table('genres as g')
-        ->select('g.*')
+        $data_cast = DB::table('casts as c')
+        ->select('c.id','c.name')
         ->get();
 
-        $data = new GenreRelation();
+        $data = new CastRelation();
 
-        return view('admin.genrerelation.create',compact('data','data_movie','data_genre'));
+        return view('admin.castrelation.create',compact('data','data_movie','data_cast'));
+
     }
     public function destroy($id)
     {
         // Delete Genre Relation
-        GenreRelation::destroy($id);
-
+        CastRelation::destroy($id);
+        
         // Store message
-        session()->flash('msg','Genre Relation has been deleted');
+        session()->flash('msg','Cast Relation has been deleted');
 
         //Redirect Page
-        return redirect('admin/genrerelation');
+        return redirect('admin/castrelation');
     }
     public function edit($id)
     {
@@ -58,37 +59,37 @@ class GenreRelationController extends Controller
         ->select('m.title','m.id')
         ->get();
 
-        $data_genre = DB::table('genres as g')
-        ->select('g.*')
+        $data_cast = DB::table('casts as c')
+        ->select('c.id','c.name')
         ->get();
         
-        $data = GenreRelation::find($id);
+        $data = CastRelation::find($id);
 
-        return view('admin.genrerelation.edit ', compact('data','data_genre','data_movie'));
+        return view('admin.castrelation.edit ', compact('data','data_movie','data_cast'));
     }
     public function store(Request $req)
     {
         // Validate Form
         $req->validate([
-            'genre'=>'required|numeric',
+            'cast'=>'required|numeric',
             'movie' => 'required|numeric',
         ]);
 
         // Save data into database
-        GenreRelation::create([
-            'genre'=> $req->genre,
+        CastRelation::create([
+            'cast'=> $req->cast,
             'movie' => $req->movie,
         ]);
 
         // Session Message
-        $req->session()->flash('msg','New genre relation has been added');
+        $req->session()->flash('msg','New cast relation has been added');
 
         // Redirect
-        return redirect('/admin/genrerelation');
+        return redirect('/admin/castrelation');
     }
     public function update(Request $req, $id)
     {
-        $data = GenreRelation::find($id);
+        $data = CastRelation::find($id);
 
         $req->validate([
             'genre'=>'required|numeric',
@@ -96,15 +97,14 @@ class GenreRelationController extends Controller
         ]);
 
         $data->update([
-            'genre'=> $req->genre,
+            'cast'=> $req->cast,
             'movie' => $req->movie,
-        ])
-
+        ]);
         // Store message session
-        $req->session()->flash('msg','Genre Relation has been updated');
+        $req->session()->flash('msg','Cast Relation has been updated');
         
         // Redirect
-        return redirect('admin/genrerelation');
+        return redirect('admin/castrelation');
     }
 
 }

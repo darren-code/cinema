@@ -7,6 +7,7 @@
 {{-- @section('header') --}}
 
 @section('content')
+@include('includes.alert')
     <div class="mb-3">
         <!-- breadcumb -->
         <div class="row mt-4">
@@ -190,9 +191,9 @@
         </div>
         {{-- Review Bawah --}}
         <div class="row mt-3">
-            <div class="col-lg-7">
+            <div class="col-lg-6">
                 @if (isset($reviews))
-                    <h5 class="pl-3">Recent Reviews</h5>
+                    <h5 class="pl-xl-3">Recent Reviews</h5>
                     <ul class="list-group">
                         @foreach ($reviews as $review)
                             <li href="#" class="list-group-item list-group-item-action">
@@ -209,44 +210,45 @@
                     <h5>No reviews about this movie yet</h5>
                 @endif
             </div>
-            @if (is_null($flag))
-            <div class="col-lg-5">
-                <form action="{{ route('user.review', ['user' => Auth::user()->id, 'movie' => $movie->id]) }}" method="post" accept-charset="utf-8">
-                    @csrf
-                    <h5 class="mt-sm-2 mt-lg-0">Any thoughts to share about this movie?</h5>
 
-                    <label for="header">The Heading</label>
-                    <input name="header" type="text" class="form-control" placeholder="The heading of this review" required>
-                    
-                    <label for="content">The Content</label>
-                    <textarea name="content" class="form-control" placeholder="Thoughts to say" required></textarea>
-                    
-                    <div class="row mt-2">
-                        <div class="col-2">
-                            <h5 class="mt-1">Rate</h5>
-                        </div>
-                        <div class="col-6">
-                            <div class="star-rating mt-1">
-                                <fieldset>
-                                    <input type="radio" id="star10" name="rating" value="10" required /><label for="star10">10 stars</label>
-                                    <input type="radio" id="star9" name="rating" value="9" /><label for="star9">9 stars</label>
-                                    <input type="radio" id="star8" name="rating" value="8" /><label for="star8">8 stars</label>
-                                    <input type="radio" id="star7" name="rating" value="7" /><label for="star7">7 stars</label>
-                                    <input type="radio" id="star6" name="rating" value="6" /><label for="star6">6 star</label>
-                                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4">4 stars</label>
-                                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                                    <input type="radio" id="star1" name="rating" value="1" checked /><label for="star1">1 star</label>
-                                </fieldset>
+            @if (is_null($flag))
+                @if (!empty($check))
+                <div class="col-lg-6">
+                    <form action="{{ route('user.review', ['user' => Auth::user()->id, 'movie' => $movie->id]) }}" method="post" accept-charset="utf-8">
+                        @csrf
+                        <h5 class="mt-sm-2 mt-lg-0">Any thoughts to share about this movie?</h5>
+
+                        <label for="header">The Heading</label>
+                        <input name="header" type="text" class="form-control" placeholder="The heading of this review" required>
+                        
+                        <label for="content">The Content</label>
+                        <textarea name="content" class="form-control" placeholder="Thoughts to say" required></textarea>
+                        
+                        <div class="row mt-2">
+                            <div class="col-8">
+                                <h5 class="mt-1">Rate</h5>
+                                <div class="star-rating mt-1">
+                                    <fieldset>
+                                        <input type="radio" id="star10" name="rating" value="10" required /><label for="star10">10 stars</label>
+                                        <input type="radio" id="star9" name="rating" value="9" /><label for="star9">9 stars</label>
+                                        <input type="radio" id="star8" name="rating" value="8" /><label for="star8">8 stars</label>
+                                        <input type="radio" id="star7" name="rating" value="7" /><label for="star7">7 stars</label>
+                                        <input type="radio" id="star6" name="rating" value="6" /><label for="star6">6 star</label>
+                                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4">4 stars</label>
+                                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                                        <input type="radio" id="star1" name="rating" value="1" checked /><label for="star1">1 star</label>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <button type="submit" class="mt-4 btn btn-info float-right">Share &nbsp; <i class="fad fa-pencil-alt"></i></button>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-info float-right">Share &nbsp; <i class="fad fa-pencil-alt"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+                @endif
             @endif
         </div>
     </div>

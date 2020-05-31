@@ -14,6 +14,10 @@ Movies
                 &nbsp;
                 {{ link_to_route('genrerelation.index', "Genre Relation", '', ['class' => 'btn btn-info ']) }}
                 &nbsp;
+                {{ link_to_route('cast.index', "Cast", '', ['class' => 'btn btn-info ']) }}
+                &nbsp;
+                {{ link_to_route('castrelation.index', "Cast Relation", '', ['class' => 'btn btn-info ']) }}
+                &nbsp;
 
                 {{ link_to_route('movies.create', "Add Movie", '', ['class' => 'btn btn-info float-right']) }}
             </div>
@@ -23,7 +27,7 @@ Movies
                 <h4 class="title">All Movies</h4>
                 <p class="category">List of all movies</p>
             </div>
-            <div class="content table-responsive table-full-width">
+            <div class="content table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>

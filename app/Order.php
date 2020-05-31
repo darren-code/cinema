@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $table = 'transaction';
-    protected $fillable = ['isPaid'];
+    protected $fillable = ['isPaid','total','method','time','user'];
     public $timestamps = false;
 }

@@ -31,6 +31,26 @@
                         </tr>
 
                         <tr>
+                            <th>Cast</th>
+                            <td>
+                                @if(isset($cast[0]))
+                                @php
+                                    $panjang = count($cast);
+                                @endphp
+                                @foreach($cast as $casts=>$g)
+                                    {{$g->name}}
+                                    @if($casts!==($panjang-1))
+                                        , 
+                                    @endif
+                                @endforeach
+                                @else
+                                    No cast yet... <pre></pre>
+                                    {{ link_to_route('castrelation.create', "Add Cast Relation", '', ['class' => 'btn btn-info']) }}
+                                @endif
+                            </td>
+                        </tr>
+
+                        <tr>
                             <th>Genre</th>
                             <td>
                                 @if(isset($genre[0]))

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -96,12 +97,15 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'booking'
         ]);
 
+        Route::post('/book', [
+            'uses' => 'TicketController@purchase',
+            'as' => 'user.book'
+        ]);
 
         Route::get('/signout', [
             'uses' => 'UserController@logout',
             'as' => 'signout',
         ]);
-
 
     });
 
@@ -138,13 +142,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::middleware('auth:admin')->group(function(){
             // Dashboard
             Route::get('/', 'DashboardController@index');
-            
-            // Studio
-            Route::resource('/studio','StudioController');
-            Route::get('/studio/seat/{id}/time/{time}','StudioController@seat')->name('studio.seat');
-            // Route::get('/studio/details/{id}','StudioController@details')->name('studio.details');
+            Route::get('/chart', 'DashboardController@chart');
 
-            // Studio Allocation
             Route::resource('/playing','PlayingController');
 
             // Airtime
@@ -162,9 +161,15 @@ Route::group(['middleware' => ['web']], function () {
             // Genre 
             Route::resource('/genre','GenreController');
 
+            // Cast Relation 
+            Route::resource('/castrelation','CastRelationController');
+
+            // Cast 
+            Route::resource('/cast','CastController');
+
             // Orders
             Route::resource('/order','OrderController');
-            Route::get('/order/confirm/{id}','OrderController@approve')->name('order.approve');
+            Route::get('/order/confirm/{id}','OrderController@confirm')->name('order.confirm');
             Route::get('/order/pending/{id}','OrderController@pending')->name('order.pending');
 
             // Tickets

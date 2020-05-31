@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Ticket;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
@@ -82,7 +84,7 @@ class TicketController extends Controller
         // Validate Form
         $req->validate([
             'seat' => 'required|max:8',
-            'cost' => 'required|numeric',
+            'cost' => 'required|numeric|max:16',
             'transaction' => 'required',
             'playing' => 'required',
         ]);
@@ -110,7 +112,7 @@ class TicketController extends Controller
         // Validate form
         $req->validate([
             'seat' => 'required|max:8',
-            'cost' => 'required|numeric',
+            'cost' => 'required|numeric|max:16',
             'transaction' => 'required',
             'playing' => 'required',
         ]);
@@ -134,7 +136,38 @@ class TicketController extends Controller
     */
     public function purchase(Request $req)
     {
-        
+        $data = json_decode($req->seats);
+
+        $id = substr(preg_replace('/(\D)/','',Uuid::uuid1()), 0, 8);
+
+        DB::table('transaction')
+        ->insert(
+            [
+                'id' => $id,
+                'total' => $req->total,
+                'method' => $req->method,
+                'isPaid' => 0,
+                'user' => Auth::user()->id,
+            ]
+        );
+
+        $last = DB::table('transaction')
+            ->orderBy('time', 'desc')
+            ->first();
+
+        for ($i = 0; $i < $req->count; $i++)
+        {
+            DB::table('tickets')
+            ->insert(
+                [
+                    'seat' => $data[$i]->seat,
+                    'playing' => $data[$i]->play,
+                    'cost' => $data[$i]->cost,
+                    'transaction' => $last->id
+                ]
+            );
+        }
+
+        return redirect('profile/' . Auth::user()->id);
     }
-        
 }
