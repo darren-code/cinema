@@ -21,9 +21,9 @@
                                 <input id="fileupload" type="file" name="photo"/>
                             </div>
                         </div>
-                            <h2>{{ $user->firstname }} {{ $user->lastname }}</h2>
+                            <h2 class="mt-2">{{ $user->firstname }} {{ $user->lastname }}</h2>
                             <h5>{{ '@' . $user->username }}</h5>
-                        <p>
+                        <p class="text-justify mt-4">
                             @if(isset($user->bio))
                                 {{ $user->bio }}
                             @else
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="mr-3 ml-4">
+                    <div class="mr-3 ml-sm-4 ml-md-0 ml-xl-0 ml-lg-0">
                         <div class="profile-head">
                             <h4>
                                 {{ $user->firstname }} {{ $user->lastname }}'s Profile
