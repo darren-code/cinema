@@ -203,8 +203,8 @@
                                             <option selected>Please select one</option>
                                             <option value="Gopay">Gopay</option>
                                             <option value="OVO">OVO</option>
-                                            <option value="debit">Debit Card</option>
-                                            <option value="credit">Credit Card</option>
+                                            <option value="Debit Card">Debit Card</option>
+                                            <option value="Credit Card">Credit Card</option>
                                         </select>
                                     </div>
                                     <div class="list-group">
@@ -290,15 +290,19 @@
             console.log(seats);
 
             // Disabled button when not checked
+
+            // Disabled button when not checked
+
+            // Disabled button when not checked
             if (checkSeat.length == 0) {
                 $('div.col>button').prop('disabled', true);
-                $('#confirmation').html(`You doesn't have select seat yet`);
+                $('#confirmation').html(`You haven't selected a seat yet`);
             } else if ($('input[type="checkbox"].seat:checked').length == 1) {
                 $('div.col>button').prop('disabled', false);
-                $('#confirmation').html(`Are you sure want to checkout with ${checkSeat.length} seat in ${displaySeat} for ${total}?`);
+                $('#confirmation').html(`Are you sure you want to checkout with ${checkSeat.length} seat in ${displaySeat} for ${total}?`);
             } else {
                 $('div.col>button').prop('disabled', false);
-                $('#confirmation').html(`Are you sure want to checkout with ${checkSeat.length} seats in ${displaySeat} for ${total}?`);
+                $('#confirmation').html(`Are you sure you want to checkout with ${checkSeat.length} seats in ${displaySeat} for ${total}?`);
             }
 
             let count = $("input:checked").length;

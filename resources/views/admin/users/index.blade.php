@@ -31,7 +31,6 @@
                             <td>{{$u->email}}</td>
                             <td>{{$u->created}}</td>
                             <td>
-                                <!-- <button class="btn btn-sm btn-success ti-close" title="Block User"></button> -->
                                 {{link_to_route('users.show','Details',$u->id,['class'=>'btn btn-success btn-sm'])}}
                             </td>
                         </tr>

@@ -29,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($data as $data => $p)
+                        @foreach($genrerelation as $genrerelation => $p)
                             <tr>
                                 <td>
                                     {{$p->id}}
@@ -53,6 +53,7 @@
 
             </div>
         </div>
+
     </div>
 </div>
 @endsection

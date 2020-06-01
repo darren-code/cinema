@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mt-sm-2">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mt-sm-2 mt-md-0">
                 <div class="card">
                     <div class="pl-3 pr-3">
                         <div class="row pt-2">

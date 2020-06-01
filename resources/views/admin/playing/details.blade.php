@@ -24,7 +24,7 @@
                         <tr>
                             <th style="padding-left: 5em">Movie Title</th>
                             <td align="right">
-                                {{link_to_route('movies.show',$playing[0]->title,$playing[0]->studio_id,[])}}
+                                {{link_to_route('movies.show',$playing[0]->title,$playing[0]->mov_id,[])}}
                             </td>
                         </tr>
                         <tr>

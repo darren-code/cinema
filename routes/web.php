@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => ['web']], function () {
+    Route::fallback(function () {
+        return abort(404);
+    });
 
     // User Panel
     Route::middleware('auth')->group(function(){
@@ -70,8 +73,6 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'user.review'
         ]);
 
-        // Route::post('profile/update','UserController@update');
-
         Route::post('/updateprofile', [
             'uses' => 'UserController@update',
             'as' => 'profile.update'
@@ -92,11 +93,6 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'movie.poster'
         ]);
 
-        Route::get('/booking', [
-            'uses' => 'UserController@booking',
-            'as' => 'booking'
-        ]);
-
         Route::post('/book', [
             'uses' => 'TicketController@purchase',
             'as' => 'user.book'
@@ -109,9 +105,6 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
-    // Route::get('/', function () {
-    //     return redirect('login');
-    // }); 
 
     Route::get('/login', function () {
         return view('login');
@@ -142,9 +135,18 @@ Route::group(['middleware' => ['web']], function () {
         Route::middleware('auth:admin')->group(function(){
             // Dashboard
             Route::get('/', 'DashboardController@index');
-            Route::get('/chart', 'DashboardController@chart');
+            Route::get('/gender', 'DashboardController@gender');
+            Route::get('/date', 'DashboardController@date');
+            Route::get('/consent', 'DashboardController@consent');
+            Route::get('/transaction', 'DashboardController@transaction');
+            Route::get('/method', 'DashboardController@method');
 
+            // Showtime
             Route::resource('/playing','PlayingController');
+
+            // Studio
+            Route::resource('/studio','StudioController');
+            Route::get('/studio/seat/{id}/{time}','StudioController@seat')->name('studio.seat');
 
             // Airtime
             Route::resource('/showtime', 'ShowtimeController');

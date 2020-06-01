@@ -22,7 +22,6 @@
 </head>
 
 <body>
-
 <div class="wrapper">
     @include('admin.layouts.sidebar')
     <div class="main-panel">
@@ -96,11 +95,10 @@
                 <div class="copyright pull-right">
                     &copy;
                     <script>document.write(new Date().getFullYear())</script>
-                    <i class="fa fa-heart heart"></i> by <a href="{{url('/')}} ">Laramax</a>
+                    <i class="fa fa-heart heart"></i> by <a href="{{url('/admin')}} ">Laramax</a>
                 </div>
             </div>
         </footer>
-
     </div>
 </div>
 
@@ -118,5 +116,6 @@
             defaultTime: '02:45 PM'
         })
     })
+    @yield('script')
 </script>
 </html>

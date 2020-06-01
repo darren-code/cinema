@@ -41,9 +41,9 @@
                                     {{link_to_route('movies.show',$p->title,$p->movie_id,[])}}
                                 </td>
                                 <td>
-                                    {{Form::open(['route'=>['castrelation.destroy',$p->id],'method'=>'DELETE'])}}
-                                        {{link_to_route('castrelation.edit','',$p->id,['class'=>'btn btn-warning btn-sm fad fa-edit']) }}
-                                        {{Form::button('',['class'=>'btn btn-danger btn-sm fad fa-trash-alt','type'=>'submit','onclick'=>'return confirm("Are you sure you want to delete this allocation?")'])}}
+                                    {{Form::open(['route'=>['castrelation.destroy', $p->id],'method' => 'DELETE'])}}
+                                        {{link_to_route('castrelation.edit', '', $p->id, ['class' => 'btn btn-warning btn-sm fad fa-edit']) }}
+                                        {{Form::button('', ['class'=>'btn btn-danger btn-sm fad fa-trash-alt', 'type' => 'submit', 'onclick' => 'return confirm("Are you sure you want to delete this allocation?")'])}}
                                     {{Form::close()}}
                                 </td>
                             </tr>

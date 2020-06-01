@@ -227,9 +227,9 @@
                         </div>
                         <div class="mt-3 float-right">
                             {{--<a href="{{ url('profile/edit', ['id' => $user->id]) }}" class="btn btn-info btn-sm fad fa-edit"></a>--}}
-                            <button type="button" class="toggle-edit toggleable btn btn-info btn-sm"><i class="fad fa-edit"></i></button>
-                            <button type="button" class="toggle-edit toggleable btn btn-danger btn-sm d-none"><i class="fad fa-times"></i></button>
-                            <button type="submit" class="toggle-edit toggleable btn btn-info btn-sm d-none"><i class="fad fa-edit"></i></button>
+                            <button type="button" class="toggle-edit toggleable btn btn-info btn-sm"><i class="fad fa-edit fa-fw"></i></button>
+                            <button type="button" class="toggle-edit toggleable btn btn-danger btn-sm d-none"><i class="fad fa-times fa-fw"></i></button>
+                            <button type="submit" class="toggle-edit toggleable btn btn-info btn-sm d-none"><i class="fad fa-edit fa-fw"></i></button>
                             {{-- <input type="hidden" value="{{ Session::token() }}" name="_token"> --}}
                         </div>
                     </div>

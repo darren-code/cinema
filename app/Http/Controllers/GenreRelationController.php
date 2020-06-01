@@ -18,14 +18,16 @@ class GenreRelationController extends Controller
     */
     public function index()
     {
-        $data = DB::table('genre_relation as gr')
+        $genrerelation = DB::table('genre_relation as gr')
         ->join('movies as m','m.id','=','gr.movie')
         ->join('genres as g','g.id','=','gr.genre')
         ->select('m.title','m.id as movie_id','gr.*','g.genre','g.id as genre_id')
+        ->orderBy('gr.id')
         ->get();
 
-        return view('admin.genrerelation.index',compact('data'));
+        return view('admin.genrerelation.index',compact('genrerelation'));
     }
+
     public function create()
     {
 
@@ -98,7 +100,7 @@ class GenreRelationController extends Controller
         $data->update([
             'genre'=> $req->genre,
             'movie' => $req->movie,
-        ])
+        ]);
 
         // Store message session
         $req->session()->flash('msg','Genre Relation has been updated');

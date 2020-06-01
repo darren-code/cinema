@@ -16,6 +16,12 @@
     <span class="text-danger">{{$errors->has('avail') ? $errors->first('avail') : ''}} </span>
 </div>
 
+<div class="form-group {{ $errors->has('duration') ? 'has-error' :'' }}">
+    {{ Form::label('duration','Duration:') }}
+    {{ Form::text('duration',$movies->duration,['class'=>'form-control border-input','placeholder'=>'70'])}}
+    <span class="text-danger">{{$errors->has('duration') ? $errors->first('duration') : ''}} </span>
+</div>
+
 <div class="form-group {{ $errors->has('released') ? 'has-error' :'' }}">
     {{ Form::label('released','Date Release :') }}
     {{{ Form::date('released', $movies->released, ['class'=>'form-control border-input']) }}}

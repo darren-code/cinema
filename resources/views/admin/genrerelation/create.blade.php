@@ -24,7 +24,7 @@
                             @include('admin.genrerelation.field')
                         </div>
                         <div class="form-group">
-                            {{ Form::submit('Add Genre Relation',['class'=>'btn btn-info btn-fill btn-wd'])}}
+                            {{ Form::submit('Add Genre Relation',['class'=>'btn btn-info btn-fill btn-wd ml-3'])}}
                         </div>
                     </div>
                     <div class="clearfix">

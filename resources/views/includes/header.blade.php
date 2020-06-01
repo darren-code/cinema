@@ -18,11 +18,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('booking') }}" id="" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="fad fa-clipboard-list"></i> My Bookings
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ url('favourite') }}" id="branch-selector" role="button" data-toggle="modal" data-target="#location-selector" aria-haspopup="true" aria-expanded="false">
                             <i class="fad fa-map-marked-alt"></i> Change Location
                         </a>

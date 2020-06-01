@@ -12,8 +12,8 @@
 @include('includes.alert')
     <div class="text-center login-area">
         <form action="{{ route('signup') }}" method="post" class="form-signin needs-validation" accept-charset="utf-8" novalidate>
-            <img class="mb-4" src="{{ URL::to('assets/img/logo.png') }}" alt="" width="72" height="72">
-            <h1 class="h3 mb-3 font-weight-normal">Laramax</h1>
+            <img class="mb-4" src="{{ URL::to('assets/img/logo.jpg') }}" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
             <label for="firstname" class="sr-only">First Name</label>
             <input type="text" id="firstname" class="form-control {{ $errors->has('firstname') ? 'is-invalid' : '' }}"
                 placeholder="John" name="firstname" required autofocus value="{{ Request::old('firstname') }}">

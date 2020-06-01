@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Movie;
 use App\Order;
 use App\Ticket;
+use App\Playing;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -19,15 +20,29 @@ class MovieController extends Controller
     */
     public function index()
     {
-        $movies = Movie::all();
+        $movies = Movie::paginate(10);
 
         return view('admin.movies.index',compact('movies'));
     }
     public function create()
     {
         $movies = new Movie();
+        
+        $data_showtime = DB::table('showtimes as st')
+            ->select('st.time','st.id')
+            ->get();
 
-        return view('admin.movies.create',compact('movies'));
+        $data_branch = DB::table('branch as b')
+            ->select('b.location','b.id')
+            ->get();
+
+        $data_studio = DB::table('studios as s')
+            ->select('s.name','s.id')
+            ->get();        
+
+        $playing = new Playing();
+
+        return view('admin.movies.create',compact('movies','playing','data_studio','data_showtime','data_branch'));
     }
     public function destroy($id)
     {
@@ -48,9 +63,11 @@ class MovieController extends Controller
     }
     public function store(Request $req)
     {
+
         // Validate Form
         $req->validate([
-            'title'=>'required',
+            // movie
+            'title'=>'required|max:256',
             'director'=>'required',
             'avail' => 'required',
             'released' => 'required',
@@ -58,25 +75,49 @@ class MovieController extends Controller
             'synopsis'=>'required',
             'poster'=>'image|required',
             'trailer' => 'required',
-            // new genre
+            'duration' => 'required|numeric',
+            // studio
+            'studio' => 'required',
+            'showtime' => 'required',
+            'branch' => 'required',
         ]);
 
         // Upload image
-        if($req->hasfile('image')){
-            $image = $req->image;
-            $image->move('poster',$image->getClientOriginalName());
-        }
+        $posterName = time().'.'.$req->poster->extension();  
+    
+        $req->poster->move(storage_path('app/poster'), $posterName);
 
         // Save data into database
-        Movie::create([
-            'title' => $req->title,
-            'director'=> $req->director,
-            'avail' => $req->avail,
-            'released' => $req->released,
-            'parental' => $req->parental,
-            'synopsis'=> $req->synopsis,
-            'poster'=> rand().$req->poster->getClientOriginalName(),
-            'trailer'=> $req->trailer,
+        // Movie::create([
+        //     'title' => $req->title,
+        //     'duration' => $req->duration,
+        //     'director'=> $req->director,
+        //     'avail' => $req->avail,
+        //     'released' => $req->released,
+        //     'parental' => $req->parental,
+        //     'synopsis'=> $req->synopsis,
+        //     'poster'=> $posterName,
+        //     'trailer'=> $req->trailer,
+        // ]);
+
+        $id = DB::table('movies')
+            ->insertGetId([
+                'title' => $req->title,
+                'duration' => $req->duration,
+                'director'=> $req->director,
+                'avail' => $req->avail,
+                'released' => $req->released,
+                'parental' => $req->parental,
+                'synopsis'=> $req->synopsis,
+                'poster'=> $posterName,
+                'trailer'=> $req->trailer,
+            ]);
+        
+        Playing::create([
+            'studio' => $req->studio,
+            'movie' => $id,
+            'showtime' => $req->showtime,
+            'branch' => $req->branch,
         ]);
 
         // Session Message
@@ -92,7 +133,7 @@ class MovieController extends Controller
 
         // Validate form
         $req->validate([
-            'title'=>'required',
+            'title'=>'required|max:256',
             'director'=>'required',
             'avail' => 'required',
             'released' => 'required',
@@ -100,12 +141,11 @@ class MovieController extends Controller
             'synopsis'=>'required',
             'poster'=>'image|mimes:jpeg,png,jpg,gif,svg',
             'trailer' => 'required',
+            'duration' => 'required|numeric',
         ]);
 
         // If new image is in upload
         if($req->poster != ''){
-            // Remove old image exists inside folder
-            // Not yet
 
             $imageName = time().'.'.$req->poster->extension();  
     
@@ -114,6 +154,7 @@ class MovieController extends Controller
             // Update Movie
             $movies->update([
                 'title' => $req->title,
+                'duration' => $req->duration,
                 'director'=> $req->director,
                 'avail' => $req->avail,
                 'released' => $req->released,
@@ -125,6 +166,7 @@ class MovieController extends Controller
         }else{
             $movies->update([
                 'title' => $req->title,
+                'duration' => $req->duration,
                 'director'=> $req->director,
                 'avail' => $req->avail,
                 'released' => $req->released,
@@ -143,12 +185,14 @@ class MovieController extends Controller
     public function show($id)
     {
         $movies = Movie::find($id);
+
         $genre = DB::table('movies as m')
             ->join('genre_relation as gr','gr.movie','=','m.id')
             ->join('genres as g','gr.genre','=','g.id')
             ->where('m.id',$id)
             ->select('g.genre')
             ->get();
+
         $cast = DB::table('movies as m')
             ->join('cast_relation as cr','cr.movie','=','m.id')
             ->join('casts as c','cr.cast','=','c.id')
@@ -173,7 +217,8 @@ class MovieController extends Controller
     {
         $movies = DB::table('movies as m')
             ->join('playing_relation as p', 'm.id', '=', 'p.movie')
-            ->select('m.title', 'm.released', 'm.poster', 'm.id as mid', 'p.branch as bid');
+            ->select('m.title', 'm.released', 'm.poster', 'm.id as mid', 'p.branch as bid')
+            ->where('m.avail', 1)->where('p.branch', $branch)->groupBy('m.id', 'm.title', 'm.released', 'm.released', 'm.poster', 'p.branch');
 
         $data = DB::table('playing_relation as pr')
             ->join('movies as m', 'pr.movie', '=', 'm.id')
@@ -182,19 +227,10 @@ class MovieController extends Controller
             ->where('b.id', $branch)
             ->orderBy('m.released', 'desc');
 
-        /*
-        $data = DB::table('playing_relation as p')
-            ->join('branch as b', 'p.branch', '=', 'b.id')
-            ->join('movies as m', 'p.movie', '=', 'm.id')
-            ->join('studios as s', 'p.studio', '=', 's.id')
-            ->join('showtimes as t', 'p.showtime', '=', 't.id')
-            ->select('s.*', 'b.*', 'm.*', 't.*', 'p.*')->get();
-        */
-
         Session::put('location', $branch);
         
         return view('front.movie.home', [
-            'nowready' => $movies->where('m.avail', 1)->where('p.branch', $branch)->take(4)->get(),
+            'nowready' => $movies->take(4)->get(),
             'upcoming' => $data->where('m.avail', 2)->take(4)->get(),
             'morefilm' => DB::table('movies')->orderBy('released', 'asc')->take(8)->get(),
             'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
@@ -403,6 +439,7 @@ class MovieController extends Controller
         return view('front.movie.browse', [
             'movies' => Movie::paginate(16),
             'genres' => DB::table('genres')->get(),
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
 
@@ -498,6 +535,7 @@ class MovieController extends Controller
             'movies' => $result->paginate(16),
             'genres' => DB::table('genres')->get(),
             'data' => $request->all(),
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
 

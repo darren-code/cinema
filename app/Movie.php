@@ -14,5 +14,6 @@ class Movie extends Model
     'parental',
     'synopsis',
     'poster',
-    'trailer'];
+    'trailer',
+    'duration'];
 }

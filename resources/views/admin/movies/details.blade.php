@@ -73,7 +73,10 @@
                             <th>Director</th>
                             <td>{{$movies->director}}</td>
                         </tr>
-
+                        <tr>
+                            <th>Duration</th>
+                            <td>{{$movies->duration}} minutes</td>
+                        </tr>
                         <tr>
                             <th>Availability</th>
                             <td>

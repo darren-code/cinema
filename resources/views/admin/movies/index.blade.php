@@ -59,7 +59,8 @@ Movies
                                         No One Under 17
                                     @endif
                                 </td>
-                                <td><img src="{{ route('movie.poster', ['filename' => $p->poster]) }}" alt="" class="img-thumbnail" style="width: 50px"></td>
+                                <td><img src="{{ route('movie.poster', ['filename' => $p->poster]) }}" alt="" 
+                                class="img-thumbnail" style="width: 50px"></td>
                                 <td>
                                     {{Form::open(['route'=>['movies.destroy',$p->id],'method'=>'DELETE'])}}
                                         {{link_to_route('movies.show','',$p->id,['class'=>'btn btn-info btn-sm fad fa-info-square'])}}
@@ -71,6 +72,17 @@ Movies
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex justify-content-center">
+                        @if (isset($data))
+                            {{ $movies->appends($data)->links() }}
+                        @else
+                            {{ $movies->links() }}
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>

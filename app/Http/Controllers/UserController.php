@@ -21,26 +21,28 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('admin.users.index',compact('users'));
+        return view('admin.users.index', compact('users'));
     }
+
     public function show($id)
     {
         // Find the user
-        $users = User::where('id',$id)->get();
-        $order = Order::where('id',$id)->get();
+        $users = User::where('id', $id)->get();
+        $order = Order::where('id', $id)->get();
         $orders = DB::table('transaction as t')
             ->join('paid_tickets as pt','t.id','=','pt.payment')
             ->select('t.id','t.total','t.method','t.time','pt.payment')
-            ->where('t.id',$id)
+            ->where('t.id', $id)
             ->get();
         
         // Return array back to user details page
-        return view('admin.users.details',compact('orders','order','users'));
+        return view('admin.users.details', compact('orders','order','users'));
     }
 
     /*
         User Panel
     */
+     
     public function register(Request $request)
     {
         $this->validate($request, [
@@ -49,15 +51,15 @@ class UserController extends Controller
             'gender' => 'required',
             'phone' => 'required|regex:/(08)[0-9]{9}/',
             'username' => 'required|min:6|unique:users',
-            'email' => 'required|email|unique:users', // Works on associative array too
-            'birthdate' => 'required|date|before:-3 years', // Restriksi Umur
+            'email' => 'required|email|unique:users',
+            'birthdate' => 'required|date|before:-3 years',
             'password' => 'required|min:4',
         ], [
-            'birthdate.before' => 'You are not old enough to register!', // Custom Error Message
+            'birthdate.before' => 'You are not old enough to register!',
             'phone.regex' => 'Please type a valid phone number.',
         ]);
-            // dd(preg_replace('/(\D)/','',Uuid::uuid1()));
-        $id = substr(preg_replace('/(\D)/','',Uuid::uuid3(Uuid::NAMESPACE_DNS,$request['username'])), 0, 8);
+        
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid3(Uuid::NAMESPACE_DNS, $request['username'])), 0, 8);
 
         $firstname = $request['firstname'];
         $lastname = $request['lastname'];
@@ -82,7 +84,7 @@ class UserController extends Controller
 
         $user->save();
 
-        Session::put('age', date_diff(date_create($birthdate), date_create('now'))->y); // Age Calculation 
+        Session::put('age', date_diff(date_create($birthdate), date_create('now'))->y);
         Auth::login($user, false);
 
         return redirect()->route('home');
@@ -90,7 +92,6 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-
         $this->validate($request, [
             'username' => 'required',
             'password' => 'required',
@@ -100,7 +101,7 @@ class UserController extends Controller
             'username' => $request['username'],
             'password' => $request['password']
         ], (!empty($request['remember'])) ? true : false)) {
-            Session::put('age', date_diff(date_create(Auth::user()->birthdate), date_create('now'))->y); // Age Calculation
+            Session::put('age', date_diff(date_create(Auth::user()->birthdate), date_create('now'))->y);
             return redirect()->route('home');
         }
         return redirect()->back()->withErrors(['Invalid Credentials!']);
@@ -142,6 +143,7 @@ class UserController extends Controller
             'history' => $history,
             'rating' => $rating->get(),
             'total' => $rating->avg('rating'),
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
 
@@ -153,24 +155,6 @@ class UserController extends Controller
 
     public function update(Request $req)
     {
-
-        // dd($id);
-        // $user = Auth::user();
-
-        /*
-        $req->validate([
-            'firstname' => 'required|max:120',
-            'lastname' => 'required|max:120',
-            'username' => 'required|min:6|unique:users|max:30',
-            'email' => 'required|email|unique:users|max:120',
-            'birthdate' => 'required|date|before:-3 years',
-            'phone' => 'required|regex:/(08)[0-9]{9}/',
-            'gender' => 'required',
-            'bio' => 'nullable|max:500'
-        ]);
-        */
-        // dd($req['lastname']);
-
         $req->validate( [
             'firstname' => 'required|max:120',
             'lastname' => 'required|max:120',
@@ -179,17 +163,21 @@ class UserController extends Controller
             'birthdate' => 'required|date|before:-3 years',
             'phone' => 'required|regex:/(08)[0-9]{9}/',
             'gender' => 'required',
-            'bio' => 'nullable|max:500'
+            'bio' => 'nullable|max:500',
+            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
 
         $user = Auth::user();
 
-        $file = $req->file('photo');
+        // $file = $req->file('photo');
 
-        if ($file)
+        if ($req->photo != '')
         {
-            $photo = $user->id . '.' . $file->extension();
-            Storage::disk('local')->put('profile/' . $file, File::get($file));
+            $imageName = $user->id . '.' . $req->photo->extension();
+
+            $req->photo->move(storage_path('app/profile'), $imageName);
+
+            // Storage::disk('local')->put('profile/' . $file, File::get($file));
         }
         else
         {
