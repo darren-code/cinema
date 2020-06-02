@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/', [
             'uses' => 'MovieController@home',
             'as' => 'home',
-        ])->name('home');
+        ]);
 
         /*
         Route::get('/home/{branch}', [
@@ -115,9 +115,6 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
-    // Route::get('/',function(){
-    //     return redirect()->route('home');
-    // })->middleware('auth');
 
     Route::get('/login', function () {
         return view('login');
@@ -127,10 +124,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/register', function () {
         return view('register');
     })->name('register');
-
-    // Route::get('/about',function(){
-    //     return view('about');
-    // });
 
     Route::post('/signup', [
         'uses' => 'UserController@register', // Controller @ Function

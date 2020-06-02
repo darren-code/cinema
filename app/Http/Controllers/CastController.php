@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cast;
+use Ramsey\Uuid\Uuid;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -58,6 +59,8 @@ class CastController extends Controller
     }
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'name'=>'required|max:256|unique:casts',
@@ -67,6 +70,7 @@ class CastController extends Controller
 
         // Save data into database
         Cast::create([
+            'id' => $id,
             'name'=> $req->name,
             'birthplace'=> $req->birthplace,
             'birthdate'=> $req->birthdate,

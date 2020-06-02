@@ -8,6 +8,6 @@ class Showtime extends Model
 {
     protected $table = 'showtimes';
     public $timestamps = false;
-    protected $fillable = ['time'];
+    protected $fillable = ['time','id'];
 }
 

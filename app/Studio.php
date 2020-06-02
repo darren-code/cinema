@@ -8,5 +8,5 @@ class Studio extends Model
 {
     protected $table = 'studios';
     public $timestamps = false;
-    protected $fillable = ['name','class'];
+    protected $fillable = ['name','class', 'id'];
 }

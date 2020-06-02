@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Studio;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class StudioController extends Controller
 {
@@ -25,7 +26,7 @@ class StudioController extends Controller
             ->join('movies as m','m.id','=','pr.movie')
             ->join('showtimes as st','st.id','=','pr.showtime')
             ->join('branch as b','b.id','=','pr.branch')
-            ->select('s.id','s.name','m.title','st.time','b.location')
+            ->select('s.id','s.name','m.title','st.time','b.location','pr.id as pr_id')
             ->orderBy('time')
             ->where('s.id',$id)
             ->get();
@@ -40,7 +41,7 @@ class StudioController extends Controller
             ->join('movies as m','m.id','=','pr.movie')
             ->join('showtimes as st','st.id','=','pr.showtime')
             ->select('s.id','s.name','m.title','st.time','b.location')
-            ->where('s.id',$id)
+            ->where('pr.id',$id)
             ->where('st.time',$time)
             ->get();
 
@@ -50,7 +51,7 @@ class StudioController extends Controller
             ->join('showtimes as st','st.id','=','pr.showtime')
             ->select('t.seat')
             ->orderBy('t.seat')
-            ->where('s.id',$id)
+            ->where('pr.id',$id)
             ->where('st.time',$time)
             ->get();
 
@@ -65,6 +66,8 @@ class StudioController extends Controller
     }
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'name'=>'required|max:30',
@@ -73,10 +76,11 @@ class StudioController extends Controller
 
         // Save data into database
         Studio::create([
+            'id' => $id,
             'name' => $req->name,
             'class'=> $req->class,
         ]);
-
+            
         // Session Message
         $req->session()->flash('msg','New studio has been added');
 

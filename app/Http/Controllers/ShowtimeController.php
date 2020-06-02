@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Showtime;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,8 @@ class ShowtimeController extends Controller
 
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'time' => 'required|unique:showtimes',
@@ -48,6 +51,7 @@ class ShowtimeController extends Controller
 
         // Save data into database
         Showtime::create([
+            'id' => $id,
             'time' => $req->time,
         ]);
 

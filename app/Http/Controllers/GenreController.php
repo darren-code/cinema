@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Genre;
+use Ramsey\Uuid\Uuid;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -45,6 +46,8 @@ class GenreController extends Controller
     }
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'genre'=>'required|unique:genres',
@@ -52,6 +55,7 @@ class GenreController extends Controller
 
         // Save data into database
         Genre::create([
+            'id' => $id,
             'genre'=> $req->genre,
         ]);
 

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    protected $fillable = ['row','seat','cost','playing','transaction'];
-    // protected $guarded = [];
+    protected $fillable = ['id', 'row','seat','cost','playing','transaction'];
     public $timestamps = false;
 }

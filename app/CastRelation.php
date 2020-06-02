@@ -8,6 +8,6 @@ class CastRelation extends Model
 {
     protected $table = 'cast_relation';
     public $timestamps = false;
-    protected $fillable = ['cast','movie'];
+    protected $fillable = ['cast','movie','id'];
 }
 

@@ -33,7 +33,7 @@
                                 <tr>
                                     <th style="padding-left: 5em">Seat Layout</th>
                                     <td align="right">
-                                        {{link_to_route('studio.seat','Details',array($value->id,$value->time),['class'=>'btn btn-success btn-sm'])}}
+                                        {{link_to_route('studio.seat','Details',array($value->pr_id,$value->time),['class'=>'btn btn-success btn-sm'])}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -42,7 +42,7 @@
                     @endforeach
                 @else
                     <p class="text-center">
-                        Studio is not allocated. Click button below to add playing relation
+                        Studio is not used.
                         <br>
                     </p>
                 @endif

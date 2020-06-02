@@ -99,8 +99,8 @@
                                         }
                                     @endphp
                                     <div class="col-6 pb-3">
-                                        <input type="checkbox" class="seat {{ $class }}" value="A{{ $i }}" name="seat[]" data-play="" data-cost="" data-flag=""
-                                        data-on="Booked" data-off="A{{ $i }}" data-onstyle="danger" data-toggle="toggle" data-size="sm"  value="A{{ $i }}" data-studio="" {{ $disable == 1 ? 'disabled' : '' }}>
+                                        <input type="checkbox" class="seat {{ $class }}" value="A{{ $i }}" name="seat[]" data-play="" data-cost="" data-flag="" data-style="seat"
+                                        data-on="Booked" data-off="A{{ $i }}" data-onstyle="success" data-offstyle="outline-success" data-toggle="toggle" data-size="sm"  value="A{{ $i }}" data-studio="" {{ $disable == 1 ? 'disabled' : '' }}>
                                     </div>
                                     @endfor
                                 </div>
@@ -126,8 +126,8 @@
                                             }
                                         @endphp
                                         <div class="col-2 pb-3">
-                                            <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}" name="seat[]" {{ $disable == 1 ? 'disabled' : '' }}
-                                            data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm" value="B{{ $i }}" data-play="" data-cost="" data-studio="">
+                                            <input type="checkbox" class="seat {{ $class }}" data-row="B" data-seat="{{ $i }}" data-branch="{{ Session::get('location') }}" name="seat[]" {{ $disable == 1 ? 'disabled' : '' }} data-style="seat"
+                                            data-on="Booked" data-off="B{{ $i }}" data-onstyle="success" data-offstyle="outline-success" data-toggle="toggle" data-size="sm" value="B{{ $i }}" data-play="" data-cost="" data-studio="">
                                         </div>
                                     @endfor
                                 </div>
@@ -153,8 +153,8 @@
                                             }
                                         @endphp
                                         <div class="col-6 pb-3">
-                                            <input type="checkbox" class="seat {{ $class }}" data-on="Booked" value="C{{ $i }}" name="seat[]" data-cost=""
-                                            data-off="C{{ $i }}" data-onstyle="primary" data-toggle="toggle" data-size="sm" data-play="" data-studio="" {{ $disable == 1 ? 'disabled' : '' }}>
+                                            <input type="checkbox" class="seat {{ $class }}" data-on="Booked" value="C{{ $i }}" name="seat[]" data-cost="" data-offstyle="outline-success" data-style="seat"
+                                            data-off="C{{ $i }}" data-onstyle="success" data-toggle="toggle" data-size="sm" data-play="" data-studio="" {{ $disable == 1 ? 'disabled' : '' }}>
                                         </div>
                                     @endfor
                                 </div>
@@ -325,6 +325,10 @@
         let luxrem = 40 - $('input.seat.deluxe:disabled').length;
         $('span#remain.deluxe').html(luxrem);
         $('span#remain.classic').html(stdrem);
+
+        $('input[type="checkbox"].seat:disabled').each(function () {
+            $(this).attr('data-offstyle', 'danger');
+        });
     });
 </script>
 @endsection

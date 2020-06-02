@@ -81,16 +81,19 @@ class TicketController extends Controller
 
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'seat' => 'required|max:8',
-            'cost' => 'required|numeric|max:16',
+            'cost' => 'required|numeric|digits_between:0,16',
             'transaction' => 'required',
             'playing' => 'required',
         ]);
 
         // Save data into database
         Ticket::create([
+            'id' => $id,
             'seat' => $req->seat,
             'cost' => $req->cost,
             'transaction' => $req->transaction,
@@ -112,7 +115,7 @@ class TicketController extends Controller
         // Validate form
         $req->validate([
             'seat' => 'required|max:8',
-            'cost' => 'required|numeric|max:16',
+            'cost' => 'required|numeric|digits_between:0,16',
             'transaction' => 'required',
             'playing' => 'required',
         ]);
@@ -136,18 +139,19 @@ class TicketController extends Controller
     */
     public function purchase(Request $req)
     {
-        $data = json_decode($req->seats);
+        date_default_timezone_set('Asia/Jakarta');
 
-        $id = substr(preg_replace('/(\D)/','',Uuid::uuid1()), 0, 8);
+        $data = json_decode($req->seats);
 
         DB::table('transaction')
         ->insert(
             [
-                'id' => $id,
+                'id' => substr(preg_replace('/(\D)/','',Uuid::uuid1()), 0, 8),
                 'total' => $req->total,
                 'method' => $req->method,
                 'isPaid' => 0,
                 'user' => Auth::user()->id,
+                'time' => now(),
             ]
         );
 
@@ -157,9 +161,12 @@ class TicketController extends Controller
 
         for ($i = 0; $i < $req->count; $i++)
         {
+            $id = substr(preg_replace('/(\D)/','',Uuid::uuid1()), 0, 8);
+
             DB::table('tickets')
             ->insert(
                 [
+                    'id' => $id,
                     'seat' => $data[$i]->seat,
                     'playing' => $data[$i]->play,
                     'cost' => $data[$i]->cost,

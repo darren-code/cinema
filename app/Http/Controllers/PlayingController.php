@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Playing;
 use App\Studio;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class PlayingController extends Controller
 
     public function destroy($id)
     {
-        // Delete Studio
+        // Delete Playing
         Playing::destroy($id);
 
         // Store message
@@ -109,6 +110,8 @@ class PlayingController extends Controller
 
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'studio' => 'required',
@@ -119,6 +122,7 @@ class PlayingController extends Controller
 
         // Save data into database
         Playing::create([
+            'id' => $id,
             'studio' => $req->studio,
             'movie' => $req->movie,
             'showtime' => $req->showtime,

@@ -54,7 +54,7 @@
                         </div>
                         @endif
 
-                        <form method="post" action="/github/cinema/admin/login">
+                        <form method="post" action="/admin/login">
                             @csrf
                             <div class="form-group">
                                 <label for="email">Email:</label>

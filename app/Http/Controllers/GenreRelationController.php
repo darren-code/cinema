@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\GenreRelation;
+use Ramsey\Uuid\Uuid;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -70,6 +71,8 @@ class GenreRelationController extends Controller
     }
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
         // Validate Form
         $req->validate([
             'genre'=>'required|numeric',
@@ -78,6 +81,7 @@ class GenreRelationController extends Controller
 
         // Save data into database
         GenreRelation::create([
+            'id' => $id,
             'genre'=> $req->genre,
             'movie' => $req->movie,
         ]);

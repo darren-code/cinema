@@ -8,6 +8,6 @@ class GenreRelation extends Model
 {
     protected $table = 'genre_relation';
     public $timestamps = false;
-    protected $fillable = ['genre','movie'];
+    protected $fillable = ['genre','movie','id'];
 }
 

@@ -15,10 +15,10 @@
             <img class="mb-4" src="{{ URL::to('assets/img/logo.jpg') }}" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Sign In</h1>
             <label for="username" class="sr-only">Username</label>
-            <input type="text" id="username" class="form-control {{ $errors->has('username') ? 'is-invalid' : '' }}"
+            <input type="text" id="username" class="form-control mb-3 {{ $errors->has('username') ? 'is-invalid' : '' }}"
                 placeholder="Username" name="username" required autofocus>
             <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+            <input type="password" id="password" class="form-control mb-3 {{ $errors->has('password') ? 'is-invalid' : '' }}"
                 placeholder="Password" name="password" required>
             <div class="checkbox mb-3">
                 <div class="custom-control custom-checkbox">

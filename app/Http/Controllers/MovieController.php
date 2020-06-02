@@ -6,6 +6,7 @@ use App\Movie;
 use App\Order;
 use App\Ticket;
 use App\Playing;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,7 @@ class MovieController extends Controller
     }
     public function store(Request $req)
     {
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
 
         // Validate Form
         if($req->avail!=1){
@@ -108,19 +110,19 @@ class MovieController extends Controller
     
         $req->poster->move(storage_path('app/poster'), $posterName);
 
-        $id = DB::table('movies')
-            ->insertGetId([
-                'title' => $req->title,
-                'duration' => $req->duration,
-                'director'=> $req->director,
-                'avail' => $req->avail,
-                'released' => $req->released,
-                'parental' => $req->parental,
-                'synopsis'=> $req->synopsis,
-                'poster'=> $posterName,
-                'trailer'=> $req->trailer,
-            ]);
-        
+        Movie::create([
+            'id' => $id,
+            'title' => $req->title,
+            'duration' => $req->duration,
+            'director'=> $req->director,
+            'avail' => $req->avail,
+            'released' => $req->released,
+            'parental' => $req->parental,
+            'synopsis'=> $req->synopsis,
+            'poster'=> $posterName,
+            'trailer'=> $req->trailer,
+        ]);
+
         if($req->avail==1){
             Playing::create([
                 'studio' => $req->studio,
@@ -249,20 +251,6 @@ class MovieController extends Controller
             'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
     }
-
-    /*
-    public function home()
-    {
-        $now_showing = Movie::where('avail', 1)->orderBy('released', 'desc')->take(4)->get();
-        $coming_soon = Movie::where('avail', 2)->orderBy('released', 'desc')->take(4)->get();
-        $more_result = Movie::where('avail', 1)->orderBy('released', 'desc')->take(8)->get();
-        return view('front.movie.home', [
-            'nowready' => $now_showing,
-            'upcoming' => $coming_soon,
-            'morefilm' => $more_result,
-        ]);
-    }
-    */
 
     public function poster($filename)
     {

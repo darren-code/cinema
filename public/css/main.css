@@ -1,5 +1,17 @@
 @charset "UTF-8";
 @import url(all.min.css);
+div.toggle.btn.btn-outline-success.off.btn-sm.seat.disabled {
+  background-color: #DC3545 !important;
+  border-color: #DC3545 !important;
+}
+div.toggle.btn.btn-outline-success.off.btn-sm.seat.disabled label {
+  color: #FFF !important;
+}
+div.toggle.btn.btn-outline-success.off.btn-sm.seat.disabled span.toggle-handle {
+  background-color: #DC3545 !important;
+  border-color: #DC3545 !important;
+}
+
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;

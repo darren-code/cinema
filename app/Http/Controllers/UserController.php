@@ -42,7 +42,7 @@ class UserController extends Controller
     /*
         User Panel
     */
-     
+    
     public function register(Request $request)
     {
         $this->validate($request, [

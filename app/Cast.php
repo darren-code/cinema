@@ -8,6 +8,6 @@ class Cast extends Model
 {
     protected $table = 'casts';
     public $timestamps = false;
-    protected $fillable = ['name','birthplace','birthdate'];
+    protected $fillable = ['name','birthplace','birthdate','id'];
 }
 

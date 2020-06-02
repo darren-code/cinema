@@ -23,7 +23,7 @@
                         </div>
                             <h2 class="mt-2">{{ $user->firstname }} {{ $user->lastname }}</h2>
                             <h5>{{ '@' . $user->username }}</h5>
-                        <p class="text-justify mt-4">
+                        <p class="text-center mt-4">
                             @if(isset($user->bio))
                                 {{ $user->bio }}
                             @else
@@ -160,6 +160,13 @@
                                         <textarea name="bio" id="bio" class="form-control toggleable d-none">{{ $user->bio }}</textarea>
                                     </div>
                                 </div>
+                                <div class="mt-3 float-right">
+                                    {{--<a href="{{ url('profile/edit', ['id' => $user->id]) }}" class="btn btn-info btn-sm fad fa-edit"></a>--}}
+                                    <button type="button" class="toggle-edit toggleable btn btn-info btn-sm"><i class="fad fa-edit fa-fw"></i></button>
+                                    <button type="button" class="toggle-edit toggleable btn btn-danger btn-sm d-none"><i class="fad fa-times fa-fw"></i></button>
+                                    <button type="submit" class="toggle-edit toggleable btn btn-info btn-sm d-none"><i class="fad fa-edit fa-fw"></i></button>
+                                    {{-- <input type="hidden" value="{{ Session::token() }}" name="_token"> --}}
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="content table-responsive">
@@ -203,7 +210,7 @@
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="list-group">
                                 @foreach ($rating as $data)
-                                    <a class="list-group-item list-group-item-action mb-3 rounded" href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $data->mid]) }}">
+                                    <a class="list-group-item list-group-item-action mb-3 " style="border-radius: 2rem!important" href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $data->mid]) }}">
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">{{ $data->header }}</h5>
                                             <small>{{ $data->rating }} / 10 <i class="fad fa-star text-warning"></i></small>
@@ -215,13 +222,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-3 float-right">
-                            {{--<a href="{{ url('profile/edit', ['id' => $user->id]) }}" class="btn btn-info btn-sm fad fa-edit"></a>--}}
-                            <button type="button" class="toggle-edit toggleable btn btn-info btn-sm"><i class="fad fa-edit fa-fw"></i></button>
-                            <button type="button" class="toggle-edit toggleable btn btn-danger btn-sm d-none"><i class="fad fa-times fa-fw"></i></button>
-                            <button type="submit" class="toggle-edit toggleable btn btn-info btn-sm d-none"><i class="fad fa-edit fa-fw"></i></button>
-                            {{-- <input type="hidden" value="{{ Session::token() }}" name="_token"> --}}
-                        </div>
+                        
                     </div>
                 </div>
             </div>

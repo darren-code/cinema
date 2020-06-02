@@ -12,7 +12,7 @@
 </div>
 
 <div class="form-group {{ $errors->has('method') ? 'has-error' :'' }}">
-    {{ Form::label('method','Availability:') }}
+    {{ Form::label('method','Payment Method:') }}
     {{Form::select('method', ['Gopay' => 'Gopay' , 'OVO' => 'OVO','Debit Card'=>'Debit Card','Credit Card'=>'Credit Card'], $order->method, ['class'=>'form-control border-input','placeholder' => 'Pick it...'])}}
     <span class="text-danger">{{$errors->has('method') ? $errors->first('method') : ''}} </span>
 </div>

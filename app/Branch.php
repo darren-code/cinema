@@ -14,6 +14,6 @@ class Branch extends Model
     'province',
     'town',
     'zip_code',
-    'address'];
+    'address','id'];
 }
 

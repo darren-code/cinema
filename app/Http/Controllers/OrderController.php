@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Order;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class OrderController extends Controller
 {
@@ -55,9 +57,14 @@ class OrderController extends Controller
     }
     public function store(Request $req)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $id = substr(preg_replace('/(\D)/', '', Uuid::uuid1()), 0, 8);
+
+
         // Validate Form
         $req->validate([
-            'total' => 'required|numeric|max:16',
+            'total' => 'required|numeric|digits_between:0,16',
             'method' => 'required',
             'isPaid' => 'required|numeric',
             'user' => 'required|numeric',
@@ -65,9 +72,10 @@ class OrderController extends Controller
 
         // Save data into database
         Order::create([
+            'id' => $id,
             'total' => $req->total,
             'method' => $req->method,
-            // 'time' => now(),
+            'time' => now(),
             'isPaid' => $req->isPaid,
             'user' => $req->user,
         ]);
@@ -85,7 +93,7 @@ class OrderController extends Controller
 
         // Validate form
         $req->validate([
-            'total' => 'required|numeric|max:16',
+            'total' => 'required|numeric|digits_between:0,16',
             'method' => 'required',
             'isPaid' => 'required|numeric',
             'user' => 'required|numeric',
