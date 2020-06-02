@@ -164,7 +164,7 @@ class UserController extends Controller
             'phone' => 'required|regex:/(08)[0-9]{9}/',
             'gender' => 'required',
             'bio' => 'nullable|max:500',
-            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg'
+            'photo' => 'file|image|mimes:jpeg,png,gif,webp|max:2048'
         ]);
 
         $user = Auth::user();
@@ -173,9 +173,14 @@ class UserController extends Controller
 
         if ($req->photo != '')
         {
-            $imageName = $user->id . '.' . $req->photo->extension();
+            $photo = $user->id . '.' . $req->photo->extension();
 
-            $req->photo->move(storage_path('app/profile'), $imageName);
+            $req->photo->move(storage_path('app/profile'), $photo);
+
+            if ($photo != 'default.png')
+            {
+                File::delete('storage/app/profile/' . $user->photo);
+            }
 
             // Storage::disk('local')->put('profile/' . $file, File::get($file));
         }

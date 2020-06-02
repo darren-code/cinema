@@ -60,7 +60,7 @@ class CastController extends Controller
     {
         // Validate Form
         $req->validate([
-            'name'=>'required|max:256',
+            'name'=>'required|max:256|unique:casts',
             'birthplace' => 'required|max:64',
             'birthdate' => 'required|date',
         ]);
@@ -83,7 +83,7 @@ class CastController extends Controller
         $data = Cast::find($id);
 
         $req->validate([
-            'name'=>'required|max:256',
+            'name'=>'required|max:256|unique:casts,name,'.$id.',id',
             'birthplace' => 'required|max:64',
             'birthdate' => 'required|date',
         ]);

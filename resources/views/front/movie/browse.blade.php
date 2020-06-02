@@ -58,7 +58,7 @@
     </div>
     <div class="row pt-3">
         @if (isset($movies[0]))
-            @foreach ($movies as $movie)
+            @foreach ($movies->unique('title') as $movie)
                 <div class="col-lg-3 col-xl-3 col-md-3 col-sm-6 col-xs-12">
                     <a href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $movie->id]) }}">
                         @if (Storage::disk('local')->has('poster/' . $movie->poster))

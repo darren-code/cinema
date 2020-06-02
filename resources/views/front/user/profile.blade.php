@@ -81,14 +81,6 @@
                         </div>
                         <div class="tab-content profile-tab" id="myTabContent">
                             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
-                                {{-- <div class="row">
-                                    <div class="col-md-6">
-                                        <label>User Id</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p>{{ $user->id }}</p>
-                                    </div>
-                                </div> --}}
                                 <div class="row">
                                     <div class="col-md-6 toggleable d-none">
                                         <label>Firstname</label>
@@ -97,7 +89,7 @@
                                         <input type="text" name="firstname" id="firstname" class="form-control toggleable d-none" value="{{ $user->firstname }}">
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6 toggleable d-none">
                                         <label>Lastname</label>
                                     </div>
@@ -105,25 +97,23 @@
                                         <input type="text" name="lastname" id="lastname" class="form-control toggleable d-none" value="{{ $user->lastname }}">
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6">
                                         <label class="toggleable">Username</label>
                                     </div>
                                     <div class="col-md-6">
                                         <p class="toggleable">{{ $user->username }}</p>
-                                        {{-- <input type="text" name="username" id="username" class="form-control toggleable d-none" value="{{ $user->username }}"> --}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6">
                                         <label class="toggleable">Email</label>
                                     </div>
                                     <div class="col-md-6">
                                         <p class="toggleable">{{ $user->email }}</p>
-                                        {{-- <input type="email" name="email" id="email" class="form-control toggleable d-none" value="{{ $user->email }}"> --}}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6">
                                         <label>Birth Date</label>
                                     </div>
@@ -137,7 +127,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6">
                                         <label>Gender</label>
                                     </div>
@@ -153,7 +143,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6">
                                         <label>Phone</label>
                                     </div>
@@ -162,7 +152,7 @@
                                         <input type="text" name="phone" id="phone" class="form-control toggleable d-none" value="{{ $user->phone }}">
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-6 toggleable d-none">
                                         <label>Bio</label>
                                     </div>
@@ -213,7 +203,7 @@
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="list-group">
                                 @foreach ($rating as $data)
-                                    <a class="list-group-item list-group-item-action" href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $data->mid]) }}">
+                                    <a class="list-group-item list-group-item-action mb-3 rounded" href="{{ route('movie.details', ['branch' => Session::get('location'), 'id' => $data->mid]) }}">
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">{{ $data->header }}</h5>
                                             <small>{{ $data->rating }} / 10 <i class="fad fa-star text-warning"></i></small>

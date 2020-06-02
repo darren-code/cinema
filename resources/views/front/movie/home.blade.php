@@ -9,7 +9,7 @@
 @include('includes.alert')
 
     @if (Session::has('location'))
-        <h3 class="mt-3">Now Showing</h3>
+    <h3 class="mt-3 text-center"><a class="text-decoration-none" href="{{ route('now.showing') }}">Now Showing</a></h3>
         <div class="row justify-content-center">
             @if (isset($nowready[0]))
                 @foreach ($nowready->unique('title') as $row)
@@ -36,7 +36,7 @@
             @endif
         </div>
         <div class="dropdown-divider"></div>
-        <h3 class="mt-3">Coming Soon</h3>
+        <h3 class="mt-3 text-center"><a class="text-decoration-none" href="{{ route('coming.soon') }}">Coming Soon</a></h3>
         <div class="dropdown-divider"></div>
         <div class="row justify-content-center">
             @if(isset($upcoming[0]))
@@ -64,7 +64,7 @@
             @endif
         </div>
         <div class="dropdown-divider"></div>
-        <h3 class="mt-3">Looking for past movies to review?</h3>
+        <h3 class="mt-3"><a href="{{ route('browse') }}" class="text-decoration-none">Looking for past movies to review?</a></h3>
         <div class="dropdown-divider"></div>
         <div class="row justify-content-center">
         @if (isset($morefilm))

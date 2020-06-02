@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/', [
             'uses' => 'MovieController@home',
             'as' => 'home',
-        ]);
+        ])->name('home');
 
         /*
         Route::get('/home/{branch}', [
@@ -41,6 +41,16 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/browse', [
             'uses' => 'MovieController@browse_movies',
             'as' => 'browse',
+        ]);
+
+        Route::get('/now', [
+            'uses' => 'MovieController@now_showing',
+            'as' => 'now.showing',
+        ]);
+
+        Route::get('/soon', [
+            'uses' => 'MovieController@coming_soon',
+            'as' => 'coming.soon',
         ]);
 
         Route::get('/movie/{branch}', [
@@ -105,6 +115,9 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
+    // Route::get('/',function(){
+    //     return redirect()->route('home');
+    // })->middleware('auth');
 
     Route::get('/login', function () {
         return view('login');

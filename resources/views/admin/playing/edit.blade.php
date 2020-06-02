@@ -24,7 +24,7 @@
                             @include('admin.playing.field')
                         </div>
                         <div class="form-group">
-                            {{ Form::submit('Update Studio Allocation',['class'=>'btn btn-info btn-fill btn-wd'])}}
+                            {{ Form::submit('Update Studio Allocation',['class'=>'ml-3 btn btn-info btn-fill btn-wd'])}}
                         </div>
                     </div>
                     <div class="clearfix">

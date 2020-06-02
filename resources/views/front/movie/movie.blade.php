@@ -121,6 +121,17 @@
                         </div>
 
                         <div class="row pt-2">
+                            <div class="col-lg-3 col-sm-4">
+                                <h5>Duration</h5>
+                            </div>
+                            <div class="col-lg-9 col-sm-8">
+                                <h5 class="">
+                                    <i class="fad fa-stopwatch"></i> {{ floor($movie->duration / 60) }} {{ floor($movie->duration / 60) != 1 ? 'Hours' : 'Hour'}} {{ ($movie->duration % 60) }} {{ ($movie->duration % 60) != 1 ? 'Minutes' : 'Minute'}}
+                                </h5>
+                            </div>
+                        </div>
+
+                        <div class="row pt-2">
                             @if ($movie->avail == 1)
                                 <div class="col-lg-3 col-sm-4">
                                     <h5 class="">

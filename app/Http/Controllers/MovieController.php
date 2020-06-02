@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class MovieController extends Controller
 {
@@ -46,11 +47,15 @@ class MovieController extends Controller
     }
     public function destroy($id)
     {
+        $movies = Movie::find($id);
+
         // Delete Movie
         Movie::destroy($id);
+        File::delete('storage/app/poster/' . $movies->poster);
 
         // Store message
         session()->flash('msg','Movie has been deleted');
+        
 
         //Redirect Page
         return redirect('admin/movies');
@@ -65,40 +70,43 @@ class MovieController extends Controller
     {
 
         // Validate Form
-        $req->validate([
-            // movie
-            'title'=>'required|max:256',
-            'director'=>'required',
-            'avail' => 'required',
-            'released' => 'required',
-            'parental' => 'required',
-            'synopsis'=>'required',
-            'poster'=>'image|required',
-            'trailer' => 'required',
-            'duration' => 'required|numeric',
-            // studio
-            'studio' => 'required',
-            'showtime' => 'required',
-            'branch' => 'required',
-        ]);
+        if($req->avail!=1){
+            $req->validate([
+                // movie
+                'title'=>'required|max:256|unique:movies',
+                'director'=>'required',
+                'avail' => 'required',
+                'released' => 'required',
+                'parental' => 'required',
+                'synopsis'=>'required',
+                'poster'=>'image|required',
+                'trailer' => 'required',
+                'duration' => 'required|numeric',
+            ]);
+        }
+        if($req->avail==1){
+            $req->validate([
+                // movie
+                'title'=>'required|max:256|unique:movies',
+                'director'=>'required',
+                'avail' => 'required',
+                'released' => 'required',
+                'parental' => 'required',
+                'synopsis'=>'required',
+                'poster'=>'image|required',
+                'trailer' => 'required',
+                'duration' => 'required|numeric',
+                // studio
+                'studio' => 'required',
+                'showtime' => 'required',
+                'branch' => 'required',
+            ]);
+        };
 
         // Upload image
         $posterName = time().'.'.$req->poster->extension();  
     
         $req->poster->move(storage_path('app/poster'), $posterName);
-
-        // Save data into database
-        // Movie::create([
-        //     'title' => $req->title,
-        //     'duration' => $req->duration,
-        //     'director'=> $req->director,
-        //     'avail' => $req->avail,
-        //     'released' => $req->released,
-        //     'parental' => $req->parental,
-        //     'synopsis'=> $req->synopsis,
-        //     'poster'=> $posterName,
-        //     'trailer'=> $req->trailer,
-        // ]);
 
         $id = DB::table('movies')
             ->insertGetId([
@@ -113,12 +121,14 @@ class MovieController extends Controller
                 'trailer'=> $req->trailer,
             ]);
         
-        Playing::create([
-            'studio' => $req->studio,
-            'movie' => $id,
-            'showtime' => $req->showtime,
-            'branch' => $req->branch,
-        ]);
+        if($req->avail==1){
+            Playing::create([
+                'studio' => $req->studio,
+                'movie' => $id,
+                'showtime' => $req->showtime,
+                'branch' => $req->branch,
+            ]);
+        }
 
         // Session Message
         $req->session()->flash('msg','New movie has been added');
@@ -133,7 +143,7 @@ class MovieController extends Controller
 
         // Validate form
         $req->validate([
-            'title'=>'required|max:256',
+            'title'=>'required|max:256|unique:movies,title,'.$id.',id',
             'director'=>'required',
             'avail' => 'required',
             'released' => 'required',
@@ -146,9 +156,11 @@ class MovieController extends Controller
 
         // If new image is in upload
         if($req->poster != ''){
+            // Delete old image
+            File::delete('storage/app/poster/' . $movies->poster);
 
+            // Store new image
             $imageName = time().'.'.$req->poster->extension();  
-    
             $req->poster->move(storage_path('app/poster'), $imageName);
 
             // Update Movie
@@ -198,6 +210,7 @@ class MovieController extends Controller
             ->join('casts as c','cr.cast','=','c.id')
             ->where('m.id',$id)
             ->select('c.name')
+            ->orderBy('c.name', 'asc')
             ->get();
         return view('admin.movies.details',compact('movies','genre','cast'));
     }
@@ -280,6 +293,7 @@ class MovieController extends Controller
             ->join('casts as c', 'cr.cast', '=', 'c.id')
             ->join('movies as m', 'cr.movie', '=', 'm.id')
             ->select('c.name')
+            ->orderBy('c.name', 'asc')
             ->where('cr.movie', $id)->get();
 
         $rating = DB::table('reviews')
@@ -537,6 +551,36 @@ class MovieController extends Controller
             'data' => $request->all(),
             'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
         ]);
+    }
+
+    public function coming_soon()
+    {
+        $soon = DB::table('playing_relation as p')
+        ->join('movies as m', 'p.movie', '=', 'm.id')
+        ->where('p.branch', Session::get('location'))
+        ->where('m.avail', 2)
+        ->paginate(16);
+
+        return view('front.movie.browse', [
+            'movies' => $soon,
+            'genres' => DB::table('genres')->get(),
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
+        ]);;
+    }
+
+    public function now_showing()
+    {
+        $now = DB::table('playing_relation as p')
+            ->join('movies as m', 'p.movie', '=', 'm.id')
+            ->where('p.branch', Session::get('location'))
+            ->where('m.avail', 1)
+            ->paginate(16);
+
+        return view('front.movie.browse', [
+            'movies' => $now,
+            'genres' => DB::table('genres')->get(),
+            'branches' => DB::table('branch')->orderBy('address', 'asc')->get(),
+        ]);;
     }
 
     public function comment(Request $request, $user, $movie)

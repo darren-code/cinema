@@ -30,9 +30,9 @@
                                     $loc_id = 0;
                                 }
                             @endphp
-
+                            Below is required if Availability in Now Showing!
                             <div class="form-group {{ $errors->has('showtime') ? 'has-error' :'' }}">
-                                {{ Form::label('showtime','Airtime:')}}
+                                {{ Form::label('showtime','Airtime :')}}
                                 <select class="form-control border-input" name="showtime">
                                     @php 
                                         if($st_id==0){
@@ -95,4 +95,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+
 @endsection

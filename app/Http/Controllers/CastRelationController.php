@@ -31,10 +31,12 @@ class CastRelationController extends Controller
     {
         $data_movie = DB::table('movies as m')
         ->select('m.title','m.id')
+        ->orderBy('m.title')
         ->get();
 
         $data_cast = DB::table('casts as c')
         ->select('c.id','c.name')
+        ->orderBy('c.name')
         ->get();
 
         $data = new CastRelation();
@@ -53,14 +55,16 @@ class CastRelationController extends Controller
         //Redirect Page
         return redirect('admin/castrelation');
     }
-    public function edit($id)
+    public function edit($id)   
     {
         $data_movie = DB::table('movies as m')
         ->select('m.title','m.id')
+        ->orderBy('m.title')
         ->get();
 
         $data_cast = DB::table('casts as c')
         ->select('c.id','c.name')
+        ->orderBy('c.name')
         ->get();
         
         $data = CastRelation::find($id);
